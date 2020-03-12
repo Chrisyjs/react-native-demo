@@ -18,6 +18,7 @@ import {
   ActivityIndicator
 } from 'react-native';
 import { Swipeable, RectButton } from 'react-native-gesture-handler';
+// FlatList.defaultProps = Object.assign(FlatList.defaultProps, {onMoveShouldSetResponder: () => true, onMoveShouldSetResponderCapture: () => true});
 
 
 export default class List extends React.Component {
