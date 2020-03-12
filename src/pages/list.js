@@ -51,16 +51,15 @@ export default class List extends React.Component {
   panResponder = () => {
     this._panResponder = PanResponder.create({
       // 要求成为响应者：
-      onStartShouldSetPanResponder: (evt, gestureState) => true,
-      onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
+      // onStartShouldSetPanResponder: (evt, gestureState) => true,
+      // onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
       onMoveShouldSetPanResponder: (evt, gestureState) => true,
       onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
 
       onPanResponderGrant: (evt, gestureState) => {
         console.log(gestureState)
-        if (gestureState.x0 <= 10) {
-          alert('goBack')
-        }
+        this.startX = gestureState.x0;
+        return true;
         // 开始手势操作。给用户一些视觉反馈，让他们知道发生了什么事情！
 
         // gestureState.{x,y} 现在会被设置为0
@@ -73,7 +72,11 @@ export default class List extends React.Component {
       },
       onPanResponderTerminationRequest: (evt, gestureState) => true,
       onPanResponderRelease: (evt, gestureState) => {
+        if (this.startX <= 30 && gestureState.moveX >= 40) {
+          alert('goBack');
+        }
         console.log(gestureState)
+        return true;
 
         // 用户放开了所有的触摸点，且此时视图已经成为了响应者。
         // 一般来说这意味着一个手势操作已经成功完成。
@@ -81,6 +84,7 @@ export default class List extends React.Component {
       onPanResponderTerminate: (evt, gestureState) => {
         // 另一个组件已经成为了新的响应者，所以当前手势将被取消。
         console.log(1234)
+        return true;
 
       },
       onShouldBlockNativeResponder: (evt, gestureState) => {
