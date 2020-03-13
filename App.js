@@ -2,121 +2,94 @@ import React from 'react';
 import { View, Text, Button } from 'react-native';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-import List from './src/pages/list'
-import MultiSelectList from './src/pages/flatList'
-import TextInput from './src/pages/textInput'
+import A1 from './src/pages/stackA/A1';
+import A2 from './src/pages/stackA/A2';
+import A3 from './src/pages/stackA/A3';
+import B1 from './src/pages/stackB/B1';
+import B2 from './src/pages/stackB/B2';
+import Other from './src/pages/stackOther/Other';
+import List from './src/pages/stackOther/List'
+import TextInput from './src/pages/stackOther/TextInput'
 
 class HomeScreen extends React.Component {
   static navigationOptions = {
     title: 'Home',
-    headerBackTitle: null
+    // headerBackTitle: null
   };
   render() {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <Text>Home Screen</Text>
         <Button
-          title="Go to Details"
-          onPress={() => this.props.navigation.navigate('Details', {
-            itemId: 86
-          })}
+          title="Go to StackOther"
+          onPress={() => this.props.navigation.navigate('StackOther')}
         />
         <Button
-          title="Go to List"
-          onPress={() => this.props.navigation.navigate('list', {
-            itemId: 86
-          })}
+          title="Go to StackA"
+          onPress={() => this.props.navigation.navigate('StackA')}
         />
         <Button
-          title="Go to TextInput"
-          onPress={() => this.props.navigation.navigate('TextInput')}
-        />
-        
-      </View>
-    );
-  }
-}
-
-class DetailsScreen extends React.Component {
-  static navigationOptions = {
-    title: 'Detail',
-  };
-  render() {
-    const { navigation } = this.props;
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Details Screen</Text>
-        <Text>
-          itemId: {navigation.getParam('itemId', 'NO-ID')}
-        </Text>
-        <Button
-          title="Go to other"
-          onPress={() => this.props.navigation.replace('other')}
-        />
-        <Button
-          title="GoBack"
-          onPress={() => this.props.navigation.goBack()}
+          title="Go to StackB"
+          onPress={() => this.props.navigation.navigate('StackB')}
         />
       </View>
     );
   }
 }
 
-class otherScreen extends React.Component {
-  static navigationOptions = {
-    title: 'otherScreen',
-  };
-  render() {
-    const { navigation } = this.props;
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>otherScreen</Text>
-        <Text>
-          itemId: {navigation.getParam('itemId', 'NO-ID')}
-        </Text>
-        <Button
-          title="Go to Details"
-          onPress={() => this.props.navigation.navigate('Details')}
-        />
-        <Button
-          title="GoBack"
-          onPress={() => this.props.navigation.goBack()}
-        />
-      </View>
-    );
-  }
-}
-const switchA = createStackNavigator(
+const StackA = createStackNavigator(
   {
-    Home: {
-      screen: HomeScreen,
-    },
-    Details: DetailsScreen,
-    other: otherScreen,
-    list: {
-      screen: List,
-      navigationOptions: {
-        gesturesEnabled: false
-      }
-    },
-    TextInput: TextInput
-    // FLatList: MultiSelectList
+    A1: A1,
+    A2: A2,
+    A3: A3
   },
   {
-    initialRouteName: 'Home',
+    initialRouteName: 'A1',
     defaultNavigationOptions: {
       // headerTintColor: '#fff',
       headerStyle: {
         // backgroundColor: '#000',
       },
-      // tabBarLabel: 'Home!',
-      // gesturesEnabled: false
+    },
+  }
+);
+const StackB = createStackNavigator(
+  {
+    B1: B1,
+    B2: B2
+  },
+  {
+    initialRouteName: 'B1',
+    defaultNavigationOptions: {
+      // headerTintColor: '#fff',
+      headerStyle: {
+        backgroundColor: 'blue',
+      },
+    },
+  }
+);
+const StackOther = createStackNavigator(
+  {
+    Other: Other,
+    List: List,
+    TextInput: TextInput
+  },
+  {
+    initialRouteName: 'Other',
+    defaultNavigationOptions: {
+      // headerTintColor: '#fff',
+      headerStyle: {
+        // backgroundColor: '#000',
+      },
     },
   }
 );
 
 const AppNavigator = createSwitchNavigator({
-  switchA: switchA
+  HomeScreen: HomeScreen,
+  StackA: StackA,
+  StackB: StackB,
+  StackOther: StackOther
 })
 
 export default createAppContainer(AppNavigator);

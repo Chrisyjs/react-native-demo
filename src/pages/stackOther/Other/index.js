@@ -1,0 +1,23 @@
+import React from 'react';
+import { View, Button, Text } from 'react-native';
+
+export default class Other extends React.Component {
+  componentDidMount() {
+    console.log('Other componentDidMount')
+  }
+  componentWillUnmount() {
+    console.log('Other componentWillUnmount')
+  }
+  render() {
+    return (
+      <View>
+        <Text>Other</Text>
+        <Button title="Go to List" onPress={() => this.props.navigation.navigate('List')}></Button>
+        <Button title="Go to TextInput" onPress={() => this.props.navigation.navigate('TextInput')}></Button>
+      </View>
+    )
+  }
+}
+
+
+

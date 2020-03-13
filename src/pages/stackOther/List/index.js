@@ -61,7 +61,6 @@ export default class List extends React.Component {
         // console.log(evt, gestureState)
         this.startX = evt.nativeEvent.pageX;
         console.log(this.startX)
-        return true;
         // 开始手势操作。给用户一些视觉反馈，让他们知道发生了什么事情！
 
         // gestureState.{x,y} 现在会被设置为0
@@ -79,21 +78,18 @@ export default class List extends React.Component {
           this.props.navigation.goBack();
         }
         // console.log(evt, gestureState)
-        return true;
 
         // 用户放开了所有的触摸点，且此时视图已经成为了响应者。
         // 一般来说这意味着一个手势操作已经成功完成。
       },
       onPanResponderTerminate: (evt, gestureState) => {
         // 另一个组件已经成为了新的响应者，所以当前手势将被取消。
-        console.log(1234)
-        return true;
+        console.log('onPanResponderTerminate')
 
       },
       onShouldBlockNativeResponder: (evt, gestureState) => {
         // 返回一个布尔值，决定当前组件是否应该阻止原生组件成为JS响应者
         // 默认返回true。目前暂时只支持android。
-        return true;
       },
     });
     console.log(this._panResponder, '2342432');
