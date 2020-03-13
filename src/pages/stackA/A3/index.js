@@ -12,7 +12,8 @@ export default class A3 extends React.Component {
     return (
       <View>
         <Text>A3</Text>
-        <Button title="Go to A1" onPress={() => this.props.navigation.navigate('A1')}></Button>
+        <Button title="Navigte to A1" onPress={() => this.props.navigation.navigate('A1')}></Button>
+        <Button title="Replace to A1" onPress={() => this.props.navigation.replace('A1')}></Button>
       </View>
     )
   }
