@@ -218,7 +218,8 @@ export default class List extends React.Component {
   };
   render() {
     return (
-      <SafeAreaView {...this._panResponder.panHandlers} style={{flex: 1}}>
+      // <SafeAreaView {...this._panResponder.panHandlers} style={{flex: 1}}>
+      <SafeAreaView style={{flex: 1}}>
         <Swipeable 
           renderLeftActions={this.renderLeftActions}
           // leftThreshold={0}

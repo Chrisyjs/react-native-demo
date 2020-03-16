@@ -14,6 +14,7 @@ export default class A3 extends React.Component {
         <Text>A3</Text>
         <Button title="Navigte to A1" onPress={() => this.props.navigation.navigate('A1')}></Button>
         <Button title="Replace to A1" onPress={() => this.props.navigation.replace('A1')}></Button>
+        <Button title="PopToTop to A1" onPress={() => this.props.navigation.popToTop()}></Button>
       </View>
     )
   }
