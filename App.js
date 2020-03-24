@@ -10,6 +10,7 @@ import B2 from './src/pages/stackB/B2';
 import Other from './src/pages/stackOther/Other';
 import List from './src/pages/stackOther/List'
 import TextInput from './src/pages/stackOther/TextInput'
+import Calendar from './src/pages/stackOther/Calendar'
 
 class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -70,9 +71,10 @@ const StackB = createStackNavigator(
 );
 const StackOther = createStackNavigator(
   {
-    Other: Other,
-    List: List,
-    TextInput: TextInput
+    Other,
+    List,
+    TextInput,
+    Calendar
   },
   {
     initialRouteName: 'Other',
