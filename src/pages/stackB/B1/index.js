@@ -13,6 +13,7 @@ export default class B1 extends React.Component {
       <View>
         <Text>B1</Text>
         <Button title="Go to B2" onPress={() => this.props.navigation.navigate('B2')}></Button>
+        <Button title="GoBack" onPress={() => this.props.navigation.goBack()}></Button>
       </View>
     )
   }

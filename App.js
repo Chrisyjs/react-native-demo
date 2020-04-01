@@ -87,7 +87,13 @@ const StackOther = createStackNavigator(
   }
 );
 
-const AppNavigator = createSwitchNavigator({
+/* const AppNavigator = createSwitchNavigator({
+  HomeScreen: HomeScreen,
+  StackA: StackA,
+  StackB: StackB,
+  StackOther: StackOther
+}) */
+const AppNavigator = createStackNavigator({   // 一样跨栈的
   HomeScreen: HomeScreen,
   StackA: StackA,
   StackB: StackB,
