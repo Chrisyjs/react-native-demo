@@ -6,7 +6,22 @@ export default class Index extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      markedDates: {}
+      markedDates: {
+        ['2020-04-01']: {
+          selected: true,
+          startingDay: true,
+          color: '#FFEFE7',
+        },
+        ['2020-04-02']: {
+          selected: true,
+          color: '#FFEFE7',
+        },
+        ['2020-04-03']: {
+          selected: true,
+          endingDay: true,
+          color: '#FFEFE7',
+        }
+      }
     }
   }
   render() {
@@ -17,12 +32,16 @@ export default class Index extends Component {
       <CalendarList
         pastScrollRange={1}
         futureScrollRange={1}
-        // selected={'2020-04-04'}
         markedDates={markedDates}
+        markingType={'period'}
         onDayPress={(day) => this.setState({
           markedDates: {
             [day.dateString]: {
-              selected: true
+              selected: true,
+              color: 'orange',
+              startingDay: true,
+              endingDay: true
+              // marked: true
             }
           }
         })}
@@ -35,7 +54,7 @@ export default class Index extends Component {
           calendarBackground: '#ffffff',
           textSectionTitleColor: '#b6c1cd',
           selectedDayBackgroundColor: 'orange',
-          selectedDayTextColor: '#FFF',
+          selectedDayTextColor: 'blue',
           todayTextColor: '#00adf5',
           dayTextColor: '#2d4150',
           textDisabledColor: '#d9e1e8',

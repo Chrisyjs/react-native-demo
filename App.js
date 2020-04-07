@@ -11,6 +11,7 @@ import Other from './src/pages/stackOther/Other';
 import List from './src/pages/stackOther/List'
 import TextInput from './src/pages/stackOther/TextInput'
 import Calendar from './src/pages/stackOther/Calendar'
+import Emotion from './src/pages/stackOther/Emotion'
 
 class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -74,7 +75,8 @@ const StackOther = createStackNavigator(
     Other,
     List,
     TextInput,
-    Calendar
+    Calendar,
+    Emotion
   },
   {
     initialRouteName: 'Other',
