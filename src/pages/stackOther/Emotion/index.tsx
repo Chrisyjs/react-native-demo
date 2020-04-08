@@ -6,8 +6,10 @@ import {
   TextInput, 
   Keyboard,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   Image,
-  SafeAreaView 
+  SafeAreaView,
+  ScrollView 
 } from 'react-native'
 import Emotion from './emotionIcon';
 import css from 'src/libs/mixins/common'
@@ -17,37 +19,36 @@ interface Props {
 interface States {
   value: string,
   keyboardHeight: number,
-  keyboardShow: boolean,
   keyboardType: 'keyboard' | 'emotionBoard' | ''
 }
 
 export default class index extends Component<Props, States> {
   private keyboardDidShow: object = {};
-  private keyboardDidHide: object = {};
+  private keyboardWillHide: object = {};
   constructor(props: Props) {
     super(props);
     this.state = {
       value: '',
       keyboardHeight: 0,
-      keyboardShow: false,
       keyboardType: ''
     }
   }
   componentDidMount() {
     this.keyboardDidShow = Keyboard.addListener('keyboardDidShow', this.keyboardDidShowCallback);
-    this.keyboardDidHide = Keyboard.addListener('keyboardDidHide', this.keyboardDidHideCallback);
+    this.keyboardWillHide = Keyboard.addListener('keyboardWillHide', this.keyboardWillHideCallback);
   }
   private keyboardDidShowCallback = (e) => {
     // console.log(e.endCoordinates.height)
     this.setState({
-      keyboardShow: true,
       keyboardType: 'keyboard',
       keyboardHeight: e.endCoordinates.height 
     })
   }
-  private keyboardDidHideCallback = (e) => {
+  private keyboardWillHideCallback = (e) => {
+    const { keyboardType } = this.state;
+    keyboardType === 'keyboard' &&
     this.setState({
-      keyboardShow: false
+      keyboardType: ''
     })
   }
   private onChangeText = (val: string) => {
@@ -64,6 +65,8 @@ export default class index extends Component<Props, States> {
   }
   private iconPress = () => {
     const { keyboardType } = this.state;
+    keyboardType === 'keyboard' && Keyboard.dismiss();
+    keyboardType === 'emotionBoard' && this.textInput && this.textInput.focus();
     this.setState({
       keyboardType: keyboardType === 'emotionBoard' ? 'keyboard' : 'emotionBoard'
     })
@@ -71,28 +74,49 @@ export default class index extends Component<Props, States> {
   private onFocus = (event: object) => {
     // console.log(event)
   }
+  private onPressBlank = () => {
+    console.log(123)
+    Keyboard.dismiss();
+    this.setState({
+      keyboardType: ''
+    })
+  }
   public render() {
-    const { value, keyboardHeight, keyboardShow, keyboardType } = this.state;
+    const { value, keyboardHeight, keyboardType } = this.state;
     return (
       <View style={{flex: 1}}>
-        <SafeAreaView style={[{flex: 1}]}>
-          <View style={[{paddingHorizontal: 10, paddingTop: 10, flex: 1}]}>
-            <TextInput style={[{...css.border()}]} onFocus={this.onFocus} onChangeText={this.onChangeText} value={value}></TextInput>
-          </View>
+        <SafeAreaView style={[{flex: 1, ...css.bgColor('yellow')}]}>
+            <ScrollView style={[{paddingHorizontal: 10, paddingTop: 10, flex: 1}]}>
+              <TextInput 
+                ref={(ref) => this.textInput = ref} 
+                style={[{...css.border(), height: 200, ...css.padding(10)}]} 
+                onFocus={this.onFocus} 
+                onChangeText={this.onChangeText} 
+                value={value}
+                multiline={true}
+              ></TextInput>
+              <TouchableWithoutFeedback onPress={this.onPressBlank}>
+                <View style={[{...css.border(), height: 300, ...css.bgColor('blue')}]}></View>
+              </TouchableWithoutFeedback>
+            </ScrollView>
         </SafeAreaView>
         {
-          !!keyboardShow && keyboardType === 'keyboard' &&
+          keyboardType === 'keyboard' &&
             <TouchableOpacity style={[styles.emoticonBtn, {bottom: keyboardHeight+10, ...css.border()}]} onPress={this.iconPress}>
               <Image source={require('src/assents/icon/icon-emoticon.png')} />
             </TouchableOpacity> 
         }
         {
           keyboardType === 'emotionBoard' && 
-          <TouchableOpacity style={[styles.emoticonBtn, {bottom: keyboardHeight+10, ...css.border()}]} onPress={this.iconPress}>
-            <Image source={require('src/assents/icon/keyboard.png')} />
-          </TouchableOpacity> 
+          <>
+            <TouchableOpacity style={[styles.emoticonBtn, {bottom: keyboardHeight+10, ...css.border()}]} onPress={this.iconPress}>
+              <Image source={require('src/assents/icon/keyboard.png')} />
+            </TouchableOpacity> 
+            <View style={[styles.emotionWrap]}>
+              <Emotion height={keyboardHeight} callback={(name: string)=>this.addIcon(name)}></Emotion>
+            </View>
+          </>
         }
-        {/* <Emotion callback={(name: string)=>this.addIcon(name)}></Emotion> */}
       </View>
     )
   }
@@ -102,5 +126,9 @@ const styles = StyleSheet.create({
   emoticonBtn: {
     position: 'absolute',
     right: 10,
+  },
+  emotionWrap: {
+    // position: 'absolute',
+    // bottom: 60
   }
 })

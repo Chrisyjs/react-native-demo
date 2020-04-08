@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Image,TouchableOpacity,Dimensions } from 'react-native';
+import { View, Image, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
 var {width} =  Dimensions.get('window');
 export const iconList = [
   {
@@ -74,18 +74,31 @@ export const iconList = [
     path: require('./icon/icon-18.png')
   }
 ]
-class Emoticon extends React.Component {
+interface Props {
+  callback: Function,
+  height: number
+}
+class Emoticon extends React.Component <Props> {
+  constructor(props: Props) {
+    super(props);
+  }
   callbackName = (name: string) => {
     this.props.callback(name)
   }
   render () {
-    const boxWidth = width/6
+    const boxWidth = width/6;
+    const { height } = this.props;
     return (
-      <View style={{flexDirection: 'row',flexWrap: 'wrap',paddingTop: 34}}>
-        {iconList.map((d,k) => <View key={k} style={{marginBottom: 18,width: boxWidth,alignItems: 'center'}}><TouchableOpacity onPress={()=> this.callbackName(d.name)} >
-          <Image source={d.path} />
-        </TouchableOpacity></View>)}
-      </View>
+      <ScrollView>
+        <View style={{flexDirection: 'row', flexWrap: 'wrap', paddingTop: 10, height: height}}>
+          {
+            iconList.map((d,k) => 
+            <View key={k} style={{marginBottom: 18, width: boxWidth, alignItems: 'center'}}><TouchableOpacity onPress={()=> this.callbackName(d.name)} >
+              <Image source={d.path} />
+            </TouchableOpacity></View>)
+          }
+        </View>
+      </ScrollView>
     )
   }
 }
