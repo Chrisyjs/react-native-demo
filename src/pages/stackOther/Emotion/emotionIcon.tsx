@@ -90,7 +90,7 @@ class Emoticon extends React.Component <Props> {
     const { height } = this.props;
     return (
       <ScrollView>
-        <View style={{flexDirection: 'row', flexWrap: 'wrap', paddingTop: 10, height: height}}>
+        <View style={{flexDirection: 'row', flexWrap: 'wrap', paddingTop: 24, height: height}}>
           {
             iconList.map((d,k) => 
             <View key={k} style={{marginBottom: 18, width: boxWidth, alignItems: 'center'}}><TouchableOpacity onPress={()=> this.callbackName(d.name)} >
