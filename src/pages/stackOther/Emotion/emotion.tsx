@@ -1,15 +1,15 @@
 import React, { Component } from 'react'
-import { 
-  Text, 
-  StyleSheet, 
-  View, 
-  TextInput, 
+import {
+  Text,
+  StyleSheet,
+  View,
+  TextInput,
   Keyboard,
   TouchableOpacity,
   TouchableWithoutFeedback,
   Image,
   SafeAreaView,
-  ScrollView, 
+  ScrollView,
   Dimensions,
   Platform
 } from 'react-native'
@@ -50,16 +50,16 @@ export default class index extends Component<Props, States> {
     // console.log(e.endCoordinates.height)
     this.setState({
       keyboardType: 'keyboard',
-      keyboardHeight: e.endCoordinates.height 
+      keyboardHeight: e.endCoordinates.height
     })
   }
   private keyboardDidHideCallback = (e) => {
     const { keyboardType } = this.state;
     // console.log(keyboardType)
     keyboardType === 'keyboard' &&
-    this.setState({
-      keyboardType: ''
-    })
+      this.setState({
+        keyboardType: ''
+      })
   }
   private addIcon = (name: string) => {
     const { addIconCallback } = this.props;
@@ -74,7 +74,7 @@ export default class index extends Component<Props, States> {
         this.setState({
           keyboardType: 'emotionBoard'
         })
-      }, 100)
+      }, 250)
     } else {
       this.setState({
         keyboardType: 'keyboard'
@@ -85,28 +85,32 @@ export default class index extends Component<Props, States> {
   }
   public render() {
     const { keyboardHeight, keyboardType } = this.state;
-    const bottom = Platform.OS === "ios" ? keyboardHeight : 0
+    const bottom = Platform.OS === "ios" ? keyboardHeight : keyboardType === 'emotionBoard' ? keyboardHeight : 0
     return (
       <>
+        {/* 键盘上方的切换按钮 */}
         {
-          keyboardType === 'keyboard' &&
-            <>
-              <TouchableOpacity style={[styles.emoticonBtn, {bottom: bottom, ...css.bgColor('red')}]} onPress={this.iconPress}>
+          !!keyboardType &&
+            <TouchableOpacity style={[styles.emoticonBtn, { bottom: bottom, ...css.bgColor('red') }]} onPress={this.iconPress}>
+              {
+                keyboardType === 'keyboard' &&
                 <Image source={require('src/assents/icon/icon-emoticon.png')} />
-              </TouchableOpacity> 
-            </>
+              }
+              {
+                keyboardType === 'emotionBoard' &&
+                <Image source={require('src/assents/icon/keyboard.png')} />
+              }
+            </TouchableOpacity>
         }
-        {/* ios 键盘不占空间 */}
+        {/* ios 键盘不占空间，安卓占据空间 */}
         {
           keyboardType === 'keyboard' && Platform.OS === 'ios' &&
-            <View style={[{height: keyboardHeight, width: DWidth, backgroundColor: 'transparent'}]}></View>
+          <View style={[{ height: keyboardHeight, width: DWidth, backgroundColor: 'transparent' }]}></View>
         }
+        {/* 表情键盘 */}
         {
-          keyboardType === 'emotionBoard' && 
+          keyboardType === 'emotionBoard' &&
           <>
-            <TouchableOpacity style={[styles.emoticonBtn, {bottom: keyboardHeight, ...css.bgColor('red')}]} onPress={this.iconPress}>
-              <Image source={require('src/assents/icon/keyboard.png')} />
-            </TouchableOpacity> 
             <View style={[styles.emotionWrap]}>
               <Emotion height={keyboardHeight} callback={this.addIcon}></Emotion>
             </View>
