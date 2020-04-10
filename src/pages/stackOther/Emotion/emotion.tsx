@@ -4,6 +4,8 @@ import {
   StyleSheet,
   View,
   TextInput,
+  Easing,
+  Animated,
   Keyboard,
   TouchableOpacity,
   TouchableWithoutFeedback,
@@ -27,7 +29,8 @@ const TextInputMap = {
 }
 interface States {
   keyboardHeight: number,
-  keyboardType: 'keyboard' | 'emotionBoard' | ''
+  keyboardType: 'keyboard' | 'emotionBoard' | '',
+  animateEmotionBoard: any
 }
 
 export default class index extends Component<Props, States> {
@@ -38,7 +41,8 @@ export default class index extends Component<Props, States> {
     super(props);
     this.state = {
       keyboardHeight: 0,
-      keyboardType: ''
+      keyboardType: '',
+      animateEmotionBoard: new Animated.Value(0)
     }
   }
   componentDidMount() {
@@ -48,8 +52,8 @@ export default class index extends Component<Props, States> {
   }
   private keyboardDidShowCallback = (e) => {
     // console.log(e.endCoordinates.height)
+    this.setKeyboardType('keyboard')
     this.setState({
-      keyboardType: 'keyboard',
       keyboardHeight: e.endCoordinates.height
     })
   }
@@ -57,9 +61,19 @@ export default class index extends Component<Props, States> {
     const { keyboardType } = this.state;
     // console.log(keyboardType)
     keyboardType === 'keyboard' &&
-      this.setState({
-        keyboardType: ''
-      })
+    this.setKeyboardType('')
+  }
+  private setKeyboardType = (type, func?: Function) => {
+    this.setState({
+      keyboardType: type
+    }, () => {
+      func instanceof Function && func();
+    })
+    // Animated.timing(this.state.animateEmotionBoard, {
+    //   toValue: (type === 'keyboard' || type === '') ? 0 : 1,
+    //   duration: 80,
+    //   easing: Easing.linear,
+    // }).start();
   }
   private addIcon = (name: string) => {
     const { addIconCallback } = this.props;
@@ -71,27 +85,24 @@ export default class index extends Component<Props, States> {
     if (keyboardType === 'keyboard') {
       keyboardType === 'keyboard' && Keyboard.dismiss();
       setTimeout(() => {  // 防止键盘收起过程中高度变化，导致闪烁
-        this.setState({
-          keyboardType: 'emotionBoard'
-        })
-      }, 250)
+        this.setKeyboardType('emotionBoard')
+      }, 80)
     } else {
-      this.setState({
-        keyboardType: 'keyboard'
-      }, () => {
-        focusCallback instanceof Function && focusCallback()
-      })
+      this.setKeyboardType('keyboard', focusCallback)
     }
   }
   public render() {
-    const { keyboardHeight, keyboardType } = this.state;
+    const { keyboardHeight, keyboardType, animateEmotionBoard } = this.state;
     const bottom = Platform.OS === "ios" ? keyboardHeight : keyboardType === 'emotionBoard' ? keyboardHeight : 0
     return (
       <>
         {/* 键盘上方的切换按钮 */}
         {
           !!keyboardType &&
-            <TouchableOpacity style={[styles.emoticonBtn, { bottom: bottom, ...css.bgColor('red') }]} onPress={this.iconPress}>
+            <TouchableOpacity style={[styles.emoticonBtn, 
+              // Platform.OS === "ios" ? { position: 'absolute', right: 0, bottom: bottom} : {...css.flexRow(), flex: 0, justifyContent: 'flex-end'}
+              {...css.flexRow(), flex: 0, justifyContent: 'flex-end'}
+            ]} onPress={this.iconPress}>
               {
                 keyboardType === 'keyboard' &&
                 <Image source={require('src/assents/icon/icon-emoticon.png')} />
@@ -105,16 +116,21 @@ export default class index extends Component<Props, States> {
         {/* ios 键盘不占空间，安卓占据空间 */}
         {
           keyboardType === 'keyboard' && Platform.OS === 'ios' &&
-          <View style={[{ height: keyboardHeight, width: DWidth, backgroundColor: 'transparent' }]}></View>
+          <View style={[{ height: keyboardHeight, width: DWidth, opacity: 0 }]}></View>
         }
         {/* 表情键盘 */}
         {
           keyboardType === 'emotionBoard' &&
-          <>
+          <Animated.View style={[{
+            /* height: animateEmotionBoard.interpolate({
+              inputRange: [0, 1],
+              outputRange: [0, keyboardHeight],
+            }) */
+          }]}>
             <View style={[styles.emotionWrap]}>
               <Emotion height={keyboardHeight} callback={this.addIcon}></Emotion>
             </View>
-          </>
+          </Animated.View>
         }
       </>
     )
@@ -123,14 +139,13 @@ export default class index extends Component<Props, States> {
 
 const styles = StyleSheet.create({
   emoticonBtn: {
-    position: 'absolute',
-    right: 0,
+    // ...css.bgColor('red'),
     zIndex: 100,
     ...css.padding(10)
   },
   emotionWrap: {
     // ...css.bgColor('#FFF'),
-    ...css.bgColor('red'),
+    ...css.bgColor('#FFF'),
     // position: 'absolute',
     // bottom: 0
   }
