@@ -56,23 +56,19 @@ export default class index extends Component<Props, States> {
   }
   private onFocus = (event: object, input: string) => {
     // console.log(event)
-    this.emotion && this.emotion.setState({
-      keyboardType: 'keyboard'
-    })
+    this.emotion && this.emotion.setKeyboardType('keyboard')
     this.currentTextInput = input;
   }
-  private onPressBlank = () => {
-    // console.log(123)
-    Keyboard.dismiss();
-    this.emotion && this.emotion.setState({
-      keyboardType: ''
-    })
-  }
+  // private onPressBlank = () => {
+  //   // console.log(123)
+  //   Keyboard.dismiss();
+  //   this.emotion && this.emotion.setKeyboardType('')
+  // }
   public render() {
     const { value1, value2 } = this.state;
     return (
       <View style={{flex: 1}}>
-        <SafeAreaView style={[{flex: 1, ...css.bgColor('yellow')}]}>
+        <SafeAreaView style={[{flex: 1, ...css.bgColor('#fff')}]}>
             <ScrollView style={[{paddingHorizontal: 10, paddingTop: 10, flex: 1}]}>
               <TextInput 
                 ref={(ref) => this.textInput1 = ref} 
@@ -91,7 +87,7 @@ export default class index extends Component<Props, States> {
                 multiline={true}
               ></TextInput>
               <TouchableWithoutFeedback onPress={this.onPressBlank}>
-                <View style={[{...css.border(), height: 300, ...css.bgColor('blue')}]}></View>
+                <View style={[{...css.border(), height: 300, ...css.bgColor('#ccc')}]}></View>
               </TouchableWithoutFeedback>
             </ScrollView>
         </SafeAreaView>
