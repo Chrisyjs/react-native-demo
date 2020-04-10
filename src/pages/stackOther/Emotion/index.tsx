@@ -13,7 +13,7 @@ import {
   Dimensions,
   Platform
 } from 'react-native'
-import Emotion from './emotion';
+import Emotion from './components/emotion';
 import css from 'src/libs/mixins/common'
 const DWidth = Dimensions.get('window').width;
 interface Props {

@@ -69,11 +69,12 @@ export default class index extends Component<Props, States> {
     }, () => {
       func instanceof Function && func();
     })
-    // Animated.timing(this.state.animateEmotionBoard, {
-    //   toValue: (type === 'keyboard' || type === '') ? 0 : 1,
-    //   duration: 80,
-    //   easing: Easing.linear,
-    // }).start();
+    /* Platform.OS !== 'ios' &&
+    Animated.timing(this.state.animateEmotionBoard, {
+      toValue: (type === 'keyboard' || type === '') ? 0 : 1,
+      duration: 80,
+      easing: Easing.linear,
+    }).start(); */
   }
   private addIcon = (name: string) => {
     const { addIconCallback } = this.props;
@@ -83,7 +84,7 @@ export default class index extends Component<Props, States> {
     const { focusCallback } = this.props;
     const { keyboardType } = this.state;
     if (keyboardType === 'keyboard') {
-      keyboardType === 'keyboard' && Keyboard.dismiss();
+      Keyboard.dismiss();
       setTimeout(() => {  // 防止键盘收起过程中高度变化，导致闪烁
         this.setKeyboardType('emotionBoard')
       }, 80)
@@ -121,12 +122,15 @@ export default class index extends Component<Props, States> {
         {/* 表情键盘 */}
         {
           keyboardType === 'emotionBoard' &&
-          <Animated.View style={[{
-            /* height: animateEmotionBoard.interpolate({
-              inputRange: [0, 1],
-              outputRange: [0, keyboardHeight],
-            }) */
-          }]}>
+          <Animated.View style={[
+            /* Platform.OS !== 'ios' &&
+            {
+              height: animateEmotionBoard.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0, keyboardHeight],
+              })
+            } */
+          ]}>
             <View style={[styles.emotionWrap]}>
               <Emotion height={keyboardHeight} callback={this.addIcon}></Emotion>
             </View>
