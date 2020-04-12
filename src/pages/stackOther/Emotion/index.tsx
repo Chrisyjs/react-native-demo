@@ -26,24 +26,23 @@ const TextInputMap = {
 interface States {
   value1: string,
   value2: string,
-  selection: {
-    start: number,
-    end: number
-  }
 }
 
 export default class index extends Component<Props, States> {
   private currentTextInput: any;
   private emotion: any;
+  private selection: {
+    start: number,
+    end: number
+  } = {
+    start: 0,
+    end: 0
+  }
   constructor(props: Props) {
     super(props);
     this.state = {
       value1: '',
       value2: '',
-      selection: {
-        start: 0,
-        end: 0
-      }
     }
   }
   componentDidMount() {
@@ -52,35 +51,39 @@ export default class index extends Component<Props, States> {
     输入字符文本改变回调
    */
   private onChangeText = (val: string, type: string) => {
-    const { start } = this.state.selection;
+    const { start } = this.selection;
+    // console.log('onChangeText')
     const t1 = this.state[type][start - 1];
     const t0 = this.state[type][start - 4];
+    // console.log(start, 2)
     // 删除的时候表情处理
     if (t1 === ']' && t0 === '[' && val.length < this.state[type].length) {
       this.setState({
         [type]: this.state[type].slice(0, start - 4) + this.state[type].slice(start)
       })
     } else {
+    // this.currentKey !== 'Backspace' &&
       this.setState({
         [type]: val
       })
+    // this.currentKey = '';
     }
   }
   /* 
     添加表情回调
    */
   private addIcon = (name: string) => {
-    const { start, end } = this.state.selection;
+    const { start, end } = this.selection;
     //  console.log(start)
     const key = TextInputMap[this.currentTextInput];
     let temp = this.state[key];
     temp = this.insertValue(temp, start, name);
+    this.selection = {
+      start: start + name.length,
+      end: start + name.length
+    }
     this.setState({
       [key]: temp,
-      selection: {
-        start: start + name.length,
-        end: start + name.length
-      }
     })
   }
   /* 
@@ -110,7 +113,7 @@ export default class index extends Component<Props, States> {
    */
   /* private onChange = (event, key) => {
     const { eventCount, target, text } = event.nativeEvent;
-    console.log(event.nativeEvent)
+    console.log('onChange')
   } */
   /* 
     光标移动回调
@@ -123,10 +126,10 @@ export default class index extends Component<Props, States> {
     //   selection.start = l - 1;
     //   selection.end = l - 1;
     // }
-
-    this.setState({
-      selection,
-    })
+    // console.log(selection.start, 1)
+    setTimeout(() => {
+      this.selection = selection
+    }, 50)
   }
   /* 
     插入字符串
@@ -137,21 +140,25 @@ export default class index extends Component<Props, States> {
   /* 
     按下按键
    */
-  /* private onKeyPress = (event, value) => {
+  private onKeyPress = (event, value) => {
+    return;
     const { key } = event.nativeEvent;
-    const { start } = this.state.selection;
+    const { start } = this.selection;
     const t1 = this.state[value][start - 1];
     const t0 = this.state[value][start - 4];
-    console.log(t1, t0)
-    console.log( this.state[value].slice(0, start - 4) + this.state[value].slice(start) )
+    console.log(t1, t0, start)
+    // console.log('onPress')
+    // console.log( this.state[value].slice(0, start - 4) + this.state[value].slice(start) )
+    this.currentKey = key;
     if (key === 'Backspace' && t1 === ']' && t0 === '[') {
-      // this.setState({
-      //   [value]: 
-      // })
+      // console.log('keyPress')
+      this.setState({
+        [value]: this.state[value].slice(0, start - 4) + this.state[value].slice(start)
+      })
     }
-  } */
+  }
   public render() {
-    const { value1, value2, selection } = this.state;
+    const { value1, value2 } = this.state;
     return (
       <View style={{flex: 1}}>
         <SafeAreaView style={[{flex: 1, ...css.bgColor('#fff')}]}>
@@ -159,7 +166,6 @@ export default class index extends Component<Props, States> {
               <TextInput 
                 // selectTextOnFocus={true}
                 // selectionColor={'red'}
-                // selection={this.selection}
                 // contextMenuHidden={true}
                 onSelectionChange={this.onSelectionChange}
                 ref={(ref) => this.textInput1 = ref} 
@@ -167,7 +173,7 @@ export default class index extends Component<Props, States> {
                 onFocus={(ev) => this.onFocus(ev, 'textInput1')} 
                 onChangeText={(val) => this.onChangeText(val, 'value1')} 
                 // onChange={(event) => this.onChange(event, 'value1')}
-                // onKeyPress={(event) => this.onKeyPress(event, 'value1')}
+                onKeyPress={(event) => this.onKeyPress(event, 'value1')}
                 value={value1}
                 multiline={true}
               ></TextInput>
@@ -186,7 +192,12 @@ export default class index extends Component<Props, States> {
               </TouchableWithoutFeedback>
             </ScrollView>
         </SafeAreaView>
-        <Emotion focusCallback={this.setFocus} addIconCallback={this.addIcon} onRef={(ref) => this.emotion = ref}></Emotion>
+        <Emotion 
+          onRef={(ref) => this.emotion = ref}
+          hasMask={false} 
+          focusCallback={this.setFocus} 
+          addIconCallback={this.addIcon} 
+        ></Emotion>
       </View>
     )
   }

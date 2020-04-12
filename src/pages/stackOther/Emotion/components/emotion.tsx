@@ -21,6 +21,7 @@ const DWidth = Dimensions.get('window').width;
 interface Props {
   focusCallback: Function,
   onRef: Function,
+  hasMask: boolean,
   addIconCallback: Function,
 }
 const TextInputMap = {
@@ -34,7 +35,7 @@ interface States {
 }
 
 export default class index extends Component<Props, States> {
-  private iconPressed: boolean = false;
+  private isIconPressed: boolean = false;
   private keyboardDidShow: object = {};
   private keyboardDidHide: object = {};
   private currentTextInput: string = '';
@@ -61,8 +62,8 @@ export default class index extends Component<Props, States> {
   private keyboardDidHideCallback = (e) => {
     const { keyboardType } = this.state;
     // console.log(keyboardType)
-    !this.iconPressed && keyboardType === 'keyboard' && this.setKeyboardType('')
-    this.iconPressed = false;
+    !this.isIconPressed && keyboardType === 'keyboard' && this.setKeyboardType('')
+    this.isIconPressed = false;
   }
   public setKeyboardType = (type, func?: Function) => {
     this.setState({
@@ -82,34 +83,39 @@ export default class index extends Component<Props, States> {
     addIconCallback instanceof Function && addIconCallback(name)
   }
   private iconPress = () => {
-    const { focusCallback } = this.props;
+    const { focusCallback, hasMask } = this.props;
     const { keyboardType } = this.state;
     if (keyboardType === 'keyboard') {
-      // iconPressed 用来防止 mask 闪烁
-      this.iconPressed = true;
+      // isIconPressed 用来防止 mask 闪烁
+      this.isIconPressed = true;
       Keyboard.dismiss();
-      this.setKeyboardType('')
       setTimeout(() => {  // 防止键盘收起过程中高度变化，导致闪烁
         this.setKeyboardType('emotionBoard')
-      }, 300)
+      }, 200)
     } else {
-      // this.setKeyboardType('');
-      // setTimeout(() => {
+      setTimeout(() => {
         this.setKeyboardType('keyboard', focusCallback)
-      // }, 3000)
+      }, 150)
     }
   }
   public render() {
     const { keyboardHeight, keyboardType, animateEmotionBoard } = this.state;
-    const bottom = Platform.OS === "ios" ? keyboardHeight + 44 : keyboardType === 'emotionBoard' ? keyboardHeight : 0
+    const { hasMask } = this.props;
+    const h = 44;
+    const bottom = Platform.OS === "ios" ? keyboardHeight + h : keyboardType === 'emotionBoard' ? keyboardHeight + h : h
     return (
       <>
         {/* 两种键盘打开都添加遮罩 */}
-        {/* {
-          !!keyboardType &&
-            <View style={[styles.mask, {bottom: bottom}]}>
-            </View>
-        } */}
+        {
+          !!keyboardType && hasMask &&
+            <TouchableWithoutFeedback onPress={() => {
+              Keyboard.dismiss();
+              this.setKeyboardType('');
+            }}>
+              <View style={[styles.mask, {bottom: bottom}]}>
+              </View>
+            </TouchableWithoutFeedback>
+        }
         <View>
           {/* 键盘上方的切换按钮 */}
           {
