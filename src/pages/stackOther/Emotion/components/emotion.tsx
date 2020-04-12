@@ -64,7 +64,7 @@ export default class index extends Component<Props, States> {
     !this.iconPressed && keyboardType === 'keyboard' && this.setKeyboardType('')
     this.iconPressed = false;
   }
-  private setKeyboardType = (type, func?: Function) => {
+  public setKeyboardType = (type, func?: Function) => {
     this.setState({
       keyboardType: type
     }, () => {
@@ -115,13 +115,13 @@ export default class index extends Component<Props, States> {
           {
             !!keyboardType &&
               <View 
-                onLayout={(e) => console.log(e.nativeEvent.layout.height)}
-                style={[styles.emoticonBtn, 
+                // onLayout={(e) => console.log(e.nativeEvent.layout.height)}
+                style={[
                   // Platform.OS === "ios" ? { position: 'absolute', right: 0, bottom: bottom} : {...css.flexRow(), flex: 0, justifyContent: 'flex-end'}
-                  {...css.flexRow(), backgroundColor: 'transparent', flex: 0, justifyContent: 'flex-end'}
+                  {...css.flexRow(), backgroundColor: '#FFF', flex: 0, justifyContent: 'flex-end'}
                 ]}
               >
-                <TouchableOpacity onPress={this.iconPress}>
+                <TouchableOpacity style={[styles.emoticonBtn]} onPress={this.iconPress}>
                   {
                     keyboardType === 'keyboard' &&
                     <Image source={require('src/assents/icon/icon-emoticon.png')} />

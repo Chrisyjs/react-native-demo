@@ -93,9 +93,10 @@ class Emoticon extends React.Component <Props> {
         <View style={{flexDirection: 'row', flexWrap: 'wrap', paddingTop: 24, height: height}}>
           {
             iconList.map((d,k) => 
-            <View key={k} style={{marginBottom: 18, width: boxWidth, alignItems: 'center'}}><TouchableOpacity onPress={()=> this.callbackName(d.name)} >
-              <Image source={d.path} />
-            </TouchableOpacity></View>)
+              <TouchableOpacity key={k} style={{marginBottom: 18, width: boxWidth, alignItems: 'center'}} onPress={()=> this.callbackName(d.name)} >
+                <Image source={d.path} />
+              </TouchableOpacity>
+            )
           }
         </View>
       </ScrollView>
