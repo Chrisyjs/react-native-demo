@@ -127,7 +127,7 @@ export default class index extends Component<Props, States> {
     //   selection.end = l - 1;
     // }
     // console.log(selection.start, 1)
-    setTimeout(() => {
+    setTimeout(() => {  // 保证先执行 changeText 再设置光标，删除表情正确
       this.selection = selection
     }, 50)
   }
