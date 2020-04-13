@@ -11,11 +11,14 @@ import {
   SafeAreaView,
   ScrollView, 
   Dimensions,
-  Platform
+  Platform,
 } from 'react-native'
+import { checkIconName } from './components/index';
 import Emotion from './components/emotion';
 import css from 'src/libs/mixins/common'
+import Toast from 'react-native-root-toast';
 const DWidth = Dimensions.get('window').width;
+const MaxLength = 6;
 interface Props {
 
 }
@@ -53,21 +56,32 @@ export default class index extends Component<Props, States> {
   private onChangeText = (val: string, type: string) => {
     const { start } = this.selection;
     // console.log('onChangeText')
-    const t1 = this.state[type][start - 1];
-    const t0 = this.state[type][start - 4];
+    const t = this.state[type].slice(start - 4, start);
     // console.log(start, 2)
     // 删除的时候表情处理
-    if (t1 === ']' && t0 === '[' && val.length < this.state[type].length) {
+    if (checkIconName(t) && val.length < this.state[type].length) {
       this.setState({
         [type]: this.state[type].slice(0, start - 4) + this.state[type].slice(start)
       })
     } else {
-    // this.currentKey !== 'Backspace' &&
+      if (val.length > MaxLength) {
+        this.setState({
+          [type]: val.slice(0, MaxLength)
+        })
+        this.showMaxLengthToast();
+        return;
+      }
       this.setState({
         [type]: val
       })
-    // this.currentKey = '';
     }
+  }
+  private showMaxLengthToast = () => {
+    Toast.show(`最多仅可输入${MaxLength}字`, {
+      position: 0,
+      opacity: 0.7,
+      shadow: false
+    })
   }
   /* 
     添加表情回调
@@ -77,6 +91,10 @@ export default class index extends Component<Props, States> {
     //  console.log(start)
     const key = TextInputMap[this.currentTextInput];
     let temp = this.state[key];
+    if (temp.length + 4 > MaxLength) {
+      this.showMaxLengthToast()
+      return;
+    };
     temp = this.insertValue(temp, start, name);
     this.selection = {
       start: start + name.length,
@@ -140,8 +158,7 @@ export default class index extends Component<Props, States> {
   /* 
     按下按键
    */
-  private onKeyPress = (event, value) => {
-    return;
+  /* private onKeyPress = (event, value) => {
     const { key } = event.nativeEvent;
     const { start } = this.selection;
     const t1 = this.state[value][start - 1];
@@ -156,7 +173,7 @@ export default class index extends Component<Props, States> {
         [value]: this.state[value].slice(0, start - 4) + this.state[value].slice(start)
       })
     }
-  }
+  } */
   public render() {
     const { value1, value2 } = this.state;
     return (
@@ -164,6 +181,7 @@ export default class index extends Component<Props, States> {
         <SafeAreaView style={[{flex: 1, ...css.bgColor('#fff')}]}>
             <ScrollView style={[{paddingHorizontal: 10, paddingTop: 10, flex: 1}]}>
               <TextInput 
+                // maxLength={MaxLength}
                 // selectTextOnFocus={true}
                 // selectionColor={'red'}
                 // contextMenuHidden={true}
@@ -173,7 +191,7 @@ export default class index extends Component<Props, States> {
                 onFocus={(ev) => this.onFocus(ev, 'textInput1')} 
                 onChangeText={(val) => this.onChangeText(val, 'value1')} 
                 // onChange={(event) => this.onChange(event, 'value1')}
-                onKeyPress={(event) => this.onKeyPress(event, 'value1')}
+                // onKeyPress={(event) => this.onKeyPress(event, 'value1')}
                 value={value1}
                 multiline={true}
               ></TextInput>
@@ -211,7 +229,7 @@ const styles = StyleSheet.create({
     ...css.padding(10)
   },
   emotionWrap: {
-    // ...css.bgColor('#FFF'),
+    ...css.bgColor('#F9FAF9'),
     ...css.bgColor('red'),
     // position: 'absolute',
     // bottom: 0

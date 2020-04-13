@@ -21,6 +21,7 @@
     "react-native-keyboard-spacer": "^0.4.1",
     "react-native-largelist-v3": "^3.0.15",
     "react-native-reanimated": "^1.4.0",
+    "react-native-root-toast": "^3.2.0",
     "react-native-screens": "^1.0.0-alpha.23",
     "react-native-spring-scrollview": "^2.0.23",
     "react-navigation": "^4.0.10",
