@@ -12,7 +12,9 @@ import List from './src/pages/stackOther/List'
 import TextInput from './src/pages/stackOther/TextInput'
 import Calendar from './src/pages/stackOther/Calendar'
 import Emotion1 from './src/pages/stackOther/Emotion/index'
-import Emotion2 from './src/pages/stackOther/Emotion/index1'
+import LifeCycle from './src/pages/stackOther/lifeCycle/index'
+import GetDerivedStateFromProps from './src/pages/stackOther/lifeCycle/getDerivedStateFromProps'
+import GetSnapshotBeforeUpdate from './src/pages/stackOther/lifeCycle/getSnapshotBeforeUpdate'
 
 class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -78,7 +80,9 @@ const StackOther = createStackNavigator(
     TextInput,
     Calendar,
     Emotion1,
-    Emotion2,
+    LifeCycle,
+    GetDerivedStateFromProps,
+    GetSnapshotBeforeUpdate
   },
   {
     initialRouteName: 'Other',
