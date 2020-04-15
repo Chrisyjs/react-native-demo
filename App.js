@@ -11,7 +11,9 @@ import Other from './src/pages/stackOther/Other';
 import List from './src/pages/stackOther/List'
 import TextInput from './src/pages/stackOther/TextInput'
 import Calendar from './src/pages/stackOther/Calendar'
-import Emotion1 from './src/pages/stackOther/Emotion/index'
+import Emotion from './src/pages/stackOther/Emotion/index'
+import Emotion1 from './src/pages/stackOther/Emotion/emotion1'
+import Emotion2 from './src/pages/stackOther/Emotion/emotion2'
 import LifeCycle from './src/pages/stackOther/lifeCycle/index'
 import GetDerivedStateFromProps from './src/pages/stackOther/lifeCycle/getDerivedStateFromProps'
 import GetSnapshotBeforeUpdate from './src/pages/stackOther/lifeCycle/getSnapshotBeforeUpdate'
@@ -80,7 +82,9 @@ const StackOther = createStackNavigator(
     List,
     TextInput,
     Calendar,
+    Emotion,
     Emotion1,
+    Emotion2,
     LifeCycle,
     GetDerivedStateFromProps,
     GetSnapshotBeforeUpdate,
