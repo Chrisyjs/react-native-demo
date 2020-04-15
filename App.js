@@ -15,6 +15,7 @@ import Emotion1 from './src/pages/stackOther/Emotion/index'
 import LifeCycle from './src/pages/stackOther/lifeCycle/index'
 import GetDerivedStateFromProps from './src/pages/stackOther/lifeCycle/getDerivedStateFromProps'
 import GetSnapshotBeforeUpdate from './src/pages/stackOther/lifeCycle/getSnapshotBeforeUpdate'
+import SetState from './src/pages/stackOther/lifeCycle/setState'
 
 class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -82,7 +83,8 @@ const StackOther = createStackNavigator(
     Emotion1,
     LifeCycle,
     GetDerivedStateFromProps,
-    GetSnapshotBeforeUpdate
+    GetSnapshotBeforeUpdate,
+    SetState,
   },
   {
     initialRouteName: 'Other',

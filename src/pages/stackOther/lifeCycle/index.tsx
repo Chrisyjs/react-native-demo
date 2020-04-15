@@ -12,6 +12,7 @@ export default class Other extends React.Component {
         <Text>LifeCycle</Text>
         <Button title="Go to getDerivedStateFromProps" onPress={() => this.props.navigation.navigate('GetDerivedStateFromProps')}></Button>
         <Button title="Go to getSnapshotBeforeUpdate" onPress={() => this.props.navigation.navigate('GetSnapshotBeforeUpdate')}></Button>
+        <Button title="Go to setState" onPress={() => this.props.navigation.navigate('SetState')}></Button>
       </View>
     )
   }
