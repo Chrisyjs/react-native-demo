@@ -18,6 +18,7 @@ export default class emotion2 extends Component <Props, States> {
   }
   render() {
     const { keyboardType, } = this.state;
+    // console.log(keyboardType)
     return (
       <View style={{flex: 1}}>
         <SafeAreaView style={{flex: 1}}>
@@ -28,6 +29,8 @@ export default class emotion2 extends Component <Props, States> {
                 onPressInput={() => {
                   this.setState({
                     keyboardType: 'keyboard'
+                  }, () => {
+                    this.addComment && this.addComment.setFocus()
                   })
                 }}
                 onPressEmotion={() => {
@@ -42,13 +45,13 @@ export default class emotion2 extends Component <Props, States> {
           }
         </SafeAreaView>
         {
-          !!keyboardType && 
-            <AddComment 
-              setKeyboardType={(type) => this.setState({keyboardType: type})}
-              keyboardType={keyboardType}
-              onRef={(ref) => this.addComment = ref}
-            >
-            </AddComment>
+          <AddComment 
+            onRef={(ref) => this.addComment = ref}
+            setKeyboardType={(type) => this.setState({keyboardType: type})}
+            keyboardType={keyboardType}
+            onRef={(ref) => this.addComment = ref}
+          >
+          </AddComment>
         }
       </View>
     )
