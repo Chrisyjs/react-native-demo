@@ -212,7 +212,6 @@ export default class index extends Component<Props, States> {
         </SafeAreaView>
         <Emotion 
           onRef={(ref) => this.emotion = ref}
-          hasMask={false} 
           focusCallback={this.setFocus} 
           addIconCallback={this.addIcon} 
         ></Emotion>

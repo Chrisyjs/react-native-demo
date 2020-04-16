@@ -15,18 +15,13 @@ import {
   Dimensions,
   Platform
 } from 'react-native'
-import Emotion from './emotionIcon';
-import css from 'src/libs/mixins/common'
+import Emotion from './index';
+import css from 'src/mixins/common'
 const DWidth = Dimensions.get('window').width;
 interface Props {
   focusCallback: Function,
   onRef: Function,
-  hasMask: boolean,
   addIconCallback: Function,
-}
-const TextInputMap = {
-  textInput1: 'value1',
-  textInput2: 'value2'
 }
 interface States {
   keyboardHeight: number,
@@ -83,7 +78,7 @@ export default class index extends Component<Props, States> {
     addIconCallback instanceof Function && addIconCallback(name)
   }
   private iconPress = () => {
-    const { focusCallback, hasMask } = this.props;
+    const { focusCallback } = this.props;
     const { keyboardType } = this.state;
     if (keyboardType === 'keyboard') {
       // isIconPressed 用来防止 mask 闪烁
@@ -100,14 +95,13 @@ export default class index extends Component<Props, States> {
   }
   public render() {
     const { keyboardHeight, keyboardType, animateEmotionBoard } = this.state;
-    const { hasMask } = this.props;
     const h = 44;
     const bottom = Platform.OS === "ios" ? keyboardHeight + h : keyboardType === 'emotionBoard' ? keyboardHeight + h : h
     return (
       <>
-        {/* 两种键盘打开都添加遮罩 */}
+        {/* 表情加遮罩点击消失 */}
         {
-          !!keyboardType && hasMask &&
+          keyboardType === 'emotionBoard' &&
             <TouchableWithoutFeedback onPress={() => {
               Keyboard.dismiss();
               this.setKeyboardType('');
@@ -174,7 +168,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     zIndex: 1,
-    backgroundColor: 'rgba(0, 0, 0, .5)'
+    backgroundColor: 'rgba(0, 0, 0, 0)'
   },
   emoticonBtn: {
     // ...css.bgColor('red'),
