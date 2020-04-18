@@ -15,8 +15,8 @@ import {
   Dimensions,
   Platform
 } from 'react-native'
-import Emotion from './index';
-import css from 'src/mixins/common'
+import Emotion from './emotionIcon';
+import css from 'src/libs/mixins/common'
 const DWidth = Dimensions.get('window').width;
 interface Props {
   focusCallback: Function,

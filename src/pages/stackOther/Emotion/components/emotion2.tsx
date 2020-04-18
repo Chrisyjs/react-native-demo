@@ -16,8 +16,9 @@ import {
   Platform
 } from 'react-native'
 import Emotion from './emotionIcon';
-import { checkIconName, insertValue } from 'src/pages/stackOther/Emotion/components/utils';
+import { checkIconName } from 'src/pages/stackOther/Emotion/components/utils';
 import css from 'src/libs/mixins/common'
+import { insertValue } from 'src/libs/util'
 import Toast from 'react-native-root-toast';
 const DWidth = Dimensions.get('window').width;
 const DHeight = Dimensions.get('window').height;

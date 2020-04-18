@@ -16,6 +16,7 @@ import {
 import { checkIconName } from './components/utils';
 import Emotion from './components/emotion1';
 import css from 'src/libs/mixins/common'
+import { insertValue } from 'src/libs/util'
 import Toast from 'react-native-root-toast';
 const DWidth = Dimensions.get('window').width;
 const MaxLength = 6;
@@ -95,7 +96,7 @@ export default class index extends Component<Props, States> {
       this.showMaxLengthToast()
       return;
     };
-    temp = this.insertValue(temp, start, name);
+    temp = insertValue(temp, start, name);
     this.selection = {
       start: start + name.length,
       end: start + name.length
@@ -148,12 +149,6 @@ export default class index extends Component<Props, States> {
     setTimeout(() => {  // 保证先执行 changeText 再设置光标，删除表情正确
       this.selection = selection
     }, 50)
-  }
-  /* 
-    插入字符串
-   */
-  private insertValue = (formerValue, index, value) => {
-    return formerValue.slice(0, index) + value + formerValue.slice(index);
   }
   /* 
     按下按键
