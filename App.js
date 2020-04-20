@@ -19,7 +19,21 @@ import LifeCycle from './src/pages/stackOther/lifeCycle/index'
 import GetDerivedStateFromProps from './src/pages/stackOther/lifeCycle/getDerivedStateFromProps'
 import GetSnapshotBeforeUpdate from './src/pages/stackOther/lifeCycle/getSnapshotBeforeUpdate'
 import SetState from './src/pages/stackOther/lifeCycle/setState'
+import StackViewStyleInterpolator from 'react-navigation-stack/src/views/StackView/StackViewStyleInterpolator';
+import { Animated } from 'react-native';
 
+const TransitionConfiguration = () => ({
+  transitionSpec: {
+    timing: Animated.timing,
+  },
+  screenInterpolator: (sceneProps: { scene: any; }) => {
+    const { scene } = sceneProps;
+    const { route } = scene;
+    const params = route.params || {};
+    const transition = params.transition || 'forHorizontal';
+    return StackViewStyleInterpolator[transition](sceneProps);
+  },
+});
 class HomeScreen extends React.Component {
   static navigationOptions = {
     title: 'Home',
@@ -59,6 +73,7 @@ const StackA = createStackNavigator(
       headerStyle: {
         // backgroundColor: '#000',
       },
+      transitionConfig: TransitionConfiguration,
     },
   }
 );
@@ -116,4 +131,4 @@ const AppNavigator = createStackNavigator({   // 一样跨栈的
   StackOther: StackOther
 })
 
-export default createAppContainer(AppNavigator);
+export default createAppContainer(StackA);

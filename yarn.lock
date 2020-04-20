@@ -5337,10 +5337,10 @@ react-native-spring-scrollview@^2.0.23:
   resolved "https://registry.npm.taobao.org/react-native-spring-scrollview/download/react-native-spring-scrollview-2.0.23.tgz#23febfc0d28c63b87dcb260ac3b6d1ad886de3ae"
   integrity sha1-I/6/wNKMY7h9yyYKw7bRrYht464=
 
-react-native@0.61.2:
-  version "0.61.2"
-  resolved "https://registry.npm.taobao.org/react-native/download/react-native-0.61.2.tgz?cache=0&sync_timestamp=1581614465770&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Freact-native%2Fdownload%2Freact-native-0.61.2.tgz#987b91b063557f8ebec803fdfea2044a24bdbe4d"
-  integrity sha1-mHuRsGNVf46+yAP9/qIESiS9vk0=
+react-native@0.61.4:
+  version "0.61.4"
+  resolved "https://registry.npm.taobao.org/react-native/download/react-native-0.61.4.tgz#9ec6e8a2aa8eac57143dcfa39115c7d9a139bc2c"
+  integrity sha1-nsbooqqOrFcUPc+jkRXH2aE5vCw=
   dependencies:
     "@babel/runtime" "^7.0.0"
     "@react-native-community/cli" "^3.0.0-alpha.1"
