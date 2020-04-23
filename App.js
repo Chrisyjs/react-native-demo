@@ -131,4 +131,4 @@ const AppNavigator = createStackNavigator({   // 一样跨栈的
   StackOther: StackOther
 })
 
-export default createAppContainer(StackA);
+export default createAppContainer(AppNavigator);

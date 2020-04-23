@@ -46,10 +46,10 @@ export default class emotion2 extends Component <Props, States> {
         </SafeAreaView>
         {
           <AddComment 
+            commentToComponent={<></>}
             onRef={(ref) => this.addComment = ref}
             setKeyboardType={(type) => this.setState({keyboardType: type})}
             keyboardType={keyboardType}
-            onRef={(ref) => this.addComment = ref}
           >
           </AddComment>
         }

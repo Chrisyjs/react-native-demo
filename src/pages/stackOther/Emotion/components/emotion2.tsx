@@ -16,26 +16,27 @@ import {
   Platform
 } from 'react-native'
 import Emotion from './emotionIcon';
-import { checkIconName } from 'src/pages/stackOther/Emotion/components/utils';
+import { checkIconName } from './utils';
 import css from 'src/libs/mixins/common'
 import { insertValue } from 'src/libs/util'
 import Toast from 'react-native-root-toast';
 const DWidth = Dimensions.get('window').width;
 const DHeight = Dimensions.get('window').height;
 const Timeout = 160;
-const MaxLength = 10;
 const TextInputMap = {
   textInput: 'value',
 }
 interface Props {
   onRef: Function,
+  maxLength?: number, 
   setKeyboardType: Function,
-  placeholder: string,
-  commentToText: any,
+  placeholder?: string,
+  commentToComponent: React.ComponentType<any> | React.ReactElement | null,
   keyboardType: 'keyboard' | 'emotionBoard' | '',
 }
 interface States {
   keyboardHeight: number,
+  maxLength: number,
   textInputType: 'big' | 'small',
   value: string
 }
@@ -43,6 +44,7 @@ interface States {
 export default class index extends Component<Props, States> {
   private isIconPressed: boolean = false;
   private textInput = React.createRef<TextInput>()
+  private emotion = React.createRef<TextInput>()
   private keyboardDidShow: object = {};
   private keyboardDidHide: object = {};
   private currentTextInput: string = '';
@@ -56,20 +58,21 @@ export default class index extends Component<Props, States> {
   constructor(props: Props) {
     super(props);
     this.state = {
+      maxLength: props.maxLength || 140,
       value: '',
       keyboardHeight: 0,
       textInputType: 'small',
     }
   }
   componentDidMount() {
-    this.props.onRef(this);
+    this.props.onRef && this.props.onRef(this);
     this.keyboardDidShow = Keyboard.addListener('keyboardDidShow', this.keyboardDidShowCallback);
     this.keyboardDidHide = Keyboard.addListener('keyboardDidHide', this.keyboardDidHideCallback);
   }
   static getDerivedStateFromProps(nextProps, state) {  
     // console.log('getDerivedStateFromProps')
-    if (!nextProps.keyboardType) {
-      // console.log('更新吧');
+    // console.log(nextProps.keyboardType, 'getDerivedStateFromProps')
+    if (!nextProps.keyboardType) {  // 关闭评论弹框后重置状态
       return {
         textInputType: 'small',
         value: ''
@@ -77,16 +80,10 @@ export default class index extends Component<Props, States> {
     }
     return null;
   }
-  private showMaxLengthToast = () => {
-    Toast.show(`最多仅可输入${MaxLength}字`, {
-      position: 0,
-      opacity: 0.7,
-      shadow: false
-    })
-  }
   private keyboardDidShowCallback = (e) => {
     // console.log(e.endCoordinates.height)
     this.setKeyboardType('keyboard')
+    // this.setFocus();
     // console.log(e.endCoordinates.height)
     this.setState({
       keyboardHeight: e.endCoordinates.height
@@ -95,8 +92,8 @@ export default class index extends Component<Props, States> {
   private keyboardDidHideCallback = (e) => {
     const { keyboardType } = this.props;
     // console.log(keyboardType)
-    !this.isIconPressed && keyboardType === 'keyboard' && this.setKeyboardType('')
-    this.isIconPressed = false;
+    /* !this.isIconPressed && keyboardType === 'keyboard' && this.setKeyboardType('')
+    this.isIconPressed = false; */
     // console.log(keyboardType, 12343)
   }
   public setKeyboardType = (type) => {
@@ -110,18 +107,20 @@ export default class index extends Component<Props, States> {
       this.isIconPressed = true;
       Keyboard.dismiss();
       setTimeout(() => {  // 防止键盘收起过程中高度变化，导致闪烁
+        // console.log(this.props.keyboardType,  '1232321')
         this.setKeyboardType('emotionBoard')
       }, Timeout)
     } else {
       setTimeout(() => {
         this.setKeyboardType('keyboard')
-        this.textInput && this.textInput.focus();
       }, Timeout)
+      this.setFocus();
     }
   }
   private setFocus = () => {
+    this.setKeyboardType('keyboard');  // focus 之前就设置 keyboardType 避免键盘弹起，顶起表情
     setTimeout(() => {
-      this.textInput && this.textInput.focus();
+      this.textInput && this.textInput.focus &&  this.textInput.focus();
     }, Timeout)
   }
   private onFocus = () => {
@@ -138,7 +137,7 @@ export default class index extends Component<Props, States> {
    */
   private onChangeText = (val: string) => {
     const { start } = this.selection;
-    let { value } = this.state;
+    let { value, maxLength } = this.state;
     // console.log('onChangeText')
     const t = value.slice(start - 4, start);
     // console.log(start, 2)
@@ -148,9 +147,9 @@ export default class index extends Component<Props, States> {
         value: value.slice(0, start - 4) + value.slice(start)
       })
     } else {
-      if (val.length > MaxLength) {
+      if (val.length > maxLength) {
         this.setState({
-          value: val.slice(0, MaxLength)
+          value: val.slice(0, maxLength)
         })
         this.showMaxLengthToast();
         return;
@@ -174,10 +173,10 @@ export default class index extends Component<Props, States> {
    */
   private addIcon = (name: string) => {
     const { start, end } = this.selection;
-    let { value } = this.state;
+    let { value, maxLength } = this.state;
     //  console.log(start)
     let temp = value;
-    if (temp.length + 4 > MaxLength) {
+    if (temp.length + 4 > maxLength) {
       this.showMaxLengthToast()
       return;
     };
@@ -190,8 +189,16 @@ export default class index extends Component<Props, States> {
       value: temp,
     })
   }
+  private showMaxLengthToast = () => {
+    const { maxLength } = this.state;
+    Toast.show(`最多仅可输入${maxLength}字`, {
+      position: 0,
+      opacity: 0.7,
+      shadow: false
+    })
+  }
   public render() {
-    const { commentToText, placeholder, keyboardType } = this.props;
+    const { commentToComponent, placeholder, keyboardType } = this.props;
     const { keyboardHeight, textInputType, value } = this.state;
     const height = textInputType === 'big' ? 298 : 91;  // 高度是下方 e.nativeEvent.layout.height 
     const bottom = Platform.OS === "ios" ? keyboardHeight + height : keyboardType === 'emotionBoard' ? keyboardHeight + height : height
@@ -202,15 +209,20 @@ export default class index extends Component<Props, States> {
         {
           !!keyboardType &&  
             <TouchableWithoutFeedback onPress={() => {
-              Keyboard.dismiss();
               this.setKeyboardType('');
+              setTimeout(() => {
+                Keyboard.dismiss();
+              }, Timeout)
             }}>
               <View style={[styles.mask, {bottom: bottom}]}>
               </View>
             </TouchableWithoutFeedback>
         }
-        <View style={[{display: !!keyboardType ? 'flex' : 'none'}]} onLayout={(e) => {
-          // console.log(e.nativeEvent.layout.height)
+        {/* <View style={[{display: !!keyboardType ? 'flex' : 'none'}]} onLayout={(e) => { */}
+        {
+        !!keyboardType &&
+        <View onLayout={(e) => {
+          console.log(e.nativeEvent.layout.height)
           // this.setState({height: e.nativeEvent.layout.height});
         }}>
           {/* 键盘上方的切换按钮 */}
@@ -219,7 +231,7 @@ export default class index extends Component<Props, States> {
                 {/* 评论给 */}
                 <View style={[{...css.flexRow(), justifyContent: 'space-between', ...css.padding(12)}]}>
                   <View>
-                    {commentToText || <Text>评论</Text>}
+                    {commentToComponent || <Text>评论</Text>}
                   </View>
                   <View style={[{...css.flexRow()}]}>
                     <TouchableOpacity style={[styles.emoticonBtn]} onPress={this.iconPress}>
@@ -246,6 +258,9 @@ export default class index extends Component<Props, States> {
                 </View>
                 {/* input */}
                 <View style={[{paddingHorizontal: 12}]}>
+                  {/* 避免点击 textInput 马上聚焦，导致键盘顶起表情 */}
+                  <TouchableOpacity onPress={this.setFocus} style={[styles.inputMask]}>
+                  </TouchableOpacity>
                   <TextInput
                     ref={(ref) => this.textInput = ref}
                     // autoFocus={true}
@@ -276,6 +291,7 @@ export default class index extends Component<Props, States> {
             </Animated.View>
           }
         </View>
+        }
       </>
     )
   }
@@ -295,6 +311,12 @@ const styles = StyleSheet.create({
     zIndex: 100,
     paddingHorizontal: 10,
   },
+  iosPos: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    zIndex: 100,
+  },
   emotionWrap: {
     ...css.bgColor('#F9FAF9'),
     // ...css.bgColor('#FFF'),
@@ -304,5 +326,14 @@ const styles = StyleSheet.create({
   input: {
     padding: 0,
     textAlignVertical: 'top'
+  },
+  inputMask: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 100,
+    // ...css.bgColor()
   }
 })
