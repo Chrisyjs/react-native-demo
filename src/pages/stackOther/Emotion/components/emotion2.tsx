@@ -259,8 +259,11 @@ export default class index extends Component<Props, States> {
                 {/* input */}
                 <View style={[{paddingHorizontal: 12}]}>
                   {/* 避免点击 textInput 马上聚焦，导致键盘顶起表情 */}
-                  <TouchableOpacity onPress={this.setFocus} style={[styles.inputMask]}>
-                  </TouchableOpacity>
+                  {
+                    keyboardType !== 'keyboard' &&
+                    <TouchableOpacity onPress={this.setFocus} style={[styles.inputMask]}>
+                    </TouchableOpacity>
+                  }
                   <TextInput
                     ref={(ref) => this.textInput = ref}
                     // autoFocus={true}
