@@ -15,10 +15,10 @@ import Emotion from './src/pages/stackOther/Emotion/index'
 import Emotion1 from './src/pages/stackOther/Emotion/emotion1'
 import Emotion2 from './src/pages/stackOther/Emotion/emotion2'
 import Teambition from './src/pages/stackOther/Teambition/index'
-import LifeCycle from './src/pages/stackOther/lifeCycle/index'
-import GetDerivedStateFromProps from './src/pages/stackOther/lifeCycle/getDerivedStateFromProps'
-import GetSnapshotBeforeUpdate from './src/pages/stackOther/lifeCycle/getSnapshotBeforeUpdate'
-import SetState from './src/pages/stackOther/lifeCycle/setState'
+import LifeCycle from './src/pages/stackOther/LifeCycle/index'
+import GetDerivedStateFromProps from './src/pages/stackOther/LifeCycle/getDerivedStateFromProps'
+import GetSnapshotBeforeUpdate from './src/pages/stackOther/LifeCycle/getSnapshotBeforeUpdate'
+import SetState from './src/pages/stackOther/LifeCycle/setState'
 import StackViewStyleInterpolator from 'react-navigation-stack/src/views/StackView/StackViewStyleInterpolator';
 import { Animated } from 'react-native';
 
