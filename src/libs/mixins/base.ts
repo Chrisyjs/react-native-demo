@@ -26,8 +26,8 @@ const base = {
   white() {
     return this.color('#FFFFFF')
   },
-  bgColor(color: string) {
-    return { backgroundColor: color}
+  bgColor(color?: string) {
+    return { backgroundColor: color || 'red'}
   },
   border(width?: number, color?: string, radius?: number) {
     return {

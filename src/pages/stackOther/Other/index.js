@@ -17,7 +17,7 @@ export default class Other extends React.Component {
         <Button title="Go to Calendar" onPress={() => this.props.navigation.navigate('Calendar')}></Button>
         <Button title="Go to Emotion" onPress={() => this.props.navigation.navigate('Emotion')}></Button>
         <Button title="Go to LifeCycle" onPress={() => this.props.navigation.navigate('LifeCycle')}></Button>
-        <Button title="Go to Teambition" onPress={() => this.props.navigation.navigate('Teambition')}></Button>
+        <Button title="Go to Claim" onPress={() => this.props.navigation.navigate('Claim')}></Button>
       </View>
     )
   }

@@ -276,6 +276,7 @@ export default class List extends React.Component {
             ListFooterComponent={this._renderFooter}
             onEndReachedThreshold={0.1}
             onEndReached={this._beginFooterRefresh}
+            debug
             refreshControl={
               <RefreshControl
                 title={'加载中...'}

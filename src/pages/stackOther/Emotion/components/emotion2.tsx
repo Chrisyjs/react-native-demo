@@ -31,6 +31,7 @@ interface Props {
   maxLength?: number, 
   setKeyboardType: Function,
   placeholder?: string,
+  onPressConfirm: Function,
   commentToComponent: React.ComponentType<any> | React.ReactElement | null,
   keyboardType: 'keyboard' | 'emotionBoard' | '',
 }
@@ -197,6 +198,10 @@ export default class index extends Component<Props, States> {
       shadow: false
     })
   }
+  private onPressConfirm = () => {
+    this.setKeyboardType('')
+    this.state.value && this.props.onPressConfirm(this.state.value)
+  }
   public render() {
     const { commentToComponent, placeholder, keyboardType } = this.props;
     const { keyboardHeight, textInputType, value } = this.state;
@@ -227,13 +232,14 @@ export default class index extends Component<Props, States> {
         }}>
           {/* 键盘上方的切换按钮 */}
           {
-              <View>
+              <View style={{...css.bgColor('white')}}>
                 {/* 评论给 */}
                 <View style={[{...css.flexRow(), justifyContent: 'space-between', ...css.padding(12)}]}>
                   <View>
                     {commentToComponent || <Text>评论</Text>}
                   </View>
                   <View style={[{...css.flexRow()}]}>
+                    <Text onPress={this.onPressConfirm}>确定</Text>
                     <TouchableOpacity style={[styles.emoticonBtn]} onPress={this.iconPress}>
                       {
                         keyboardType === 'keyboard' &&
