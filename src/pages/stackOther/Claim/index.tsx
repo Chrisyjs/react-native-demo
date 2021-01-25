@@ -71,7 +71,7 @@ export default class Other extends React.Component {
   onPressConfirm = (value) => {
     const { clickedXY, claimTagList, imgW } = this.state;
     let direction = 'right'
-    if(clickedXY.x > imgW/2) {
+    if (clickedXY.x > imgW / 2) {
       direction = 'left'
     }
     // console.log(clickedXY.x, imgW)
@@ -84,7 +84,7 @@ export default class Other extends React.Component {
           y: clickedXY.y,
           direction,
         },
-        key: Number(Math.random().toString().substr(3,4) + Date.now()).toString(36),
+        key: Number(Math.random().toString().substr(3, 4) + Date.now()).toString(36),
       }]
     })
   }
@@ -99,10 +99,32 @@ export default class Other extends React.Component {
       this.addComment && this.addComment.setFocus()
     })
   }
-  changeDirection = (key) => {
+  changeDirection = (key, direction, obj) => {
     const { claimTagList } = this.state
-    const item = claimTagList.find(item => item.key === key)
-    item.tagLocation.direction = item.tagLocation.direction === 'left' ? 'right' : 'left'
+    const item = claimTagList.find(item => item.key === key) || {}
+    item.tagLocation.direction = direction
+    item.tagLocation.x = obj.x
+    this.setState({})
+  }
+  pressRelease(key, e, gs, deleteB) {
+    const { imgW, imgH, claimTagList } = this.state
+    const deletePosition = {
+      x: imgW / 2 - 32,
+      y: imgH - 30 - 42,
+    }
+    const tag = claimTagList.find(item => item.key === key) || {}
+    const idx = claimTagList.findIndex(item => item.key === key)
+    if (!deleteB) {
+      tag.tagLocation.x = gs.x
+      tag.tagLocation.y = gs.y
+    } else {
+      if (deletePosition.x < gs.x && gs.x < deletePosition.x + 42 && gs.y > deletePosition.y - 20 && gs.y < deletePosition.y + 20) {
+        claimTagList.splice(idx, 1)
+      } else {
+        tag.tagLocation.x = gs.x
+        tag.tagLocation.y = gs.y
+      }
+    }
     this.setState({})
   }
   render() {
@@ -119,7 +141,7 @@ export default class Other extends React.Component {
                     boxH={imgH}
                     key={d.key}
                     onPress={(e) => this.setState({ deleteView: e })}
-                    // pressDragRelease={this.pressRelease.bind(this, d.key)}
+                    pressDragRelease={this.pressRelease.bind(this, d.key)}
                     changeDirection={this.changeDirection.bind(this, d.key)}
                     x={d.tagLocation.x}
                     title={d.tagTxt}

@@ -227,7 +227,7 @@ export default class index extends Component<Props, States> {
         {
         !!keyboardType &&
         <View onLayout={(e) => {
-          console.log(e.nativeEvent.layout.height)
+          // console.log(e.nativeEvent.layout.height)
           // this.setState({height: e.nativeEvent.layout.height});
         }}>
           {/* 键盘上方的切换按钮 */}

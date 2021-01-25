@@ -1,6 +1,7 @@
-import React, {Component} from 'react';
-import {View,Text, PanResponder, Animated} from 'react-native';
+import React, { Component } from 'react';
+import { View, Text, PanResponder, Animated } from 'react-native';
 import Tag from './tag';
+import { debounce, throttle } from 'src/libs/util'
 export default class Draggable extends Component {
   static defaultProps = {
     offsetX: 100,
@@ -10,14 +11,14 @@ export default class Draggable extends Component {
   };
   constructor(props, defaultProps) {
     super(props, defaultProps);
-    const {pressDragRelease} = props;
+    const { pressDragRelease } = props;
     this.panResponder = PanResponder.create({
       onMoveShouldSetPanResponder: (_, gestureState) => {
-        const {dx, dy} = gestureState;
+        const { dx, dy } = gestureState;
         return (dx > 2 || dx < -2 || dy > 2 || dy < -2)
       },
       onMoveShouldSetPanResponderCapture: (_, gestureState) => {
-        const {dx, dy} = gestureState;
+        const { dx, dy } = gestureState;
         return (dx > 2 || dx < -2 || dy > 2 || dy < -2)
       },
       onPanResponderGrant: (e, gestureState) => {
@@ -25,16 +26,16 @@ export default class Draggable extends Component {
         this._left = this.props.x;
         this.props.onPress(true)
       },
-      onPanResponderMove: (e, gs) => {
+      onPanResponderMove: throttle((e, gs) => {
         let obj = {
           x: this._left + gs.dx,
           y: this._top + gs.dy,
         };
-        pressDragRelease(e, obj);
-      },
+        pressDragRelease(e, obj)
+      }, 50, true),
       onPanResponderRelease: (e, gs) => {
         this.props.onPress(false)
-        pressDragRelease(e, this.checkOverflow(gs),this.props.delete);
+        pressDragRelease(e, this.checkOverflow(gs), true);
       },
     });
   }
@@ -68,6 +69,7 @@ export default class Draggable extends Component {
     if (y > this.props.boxH - this.state.height) {
       y = this.props.boxH - this.state.height;
     }
+    console.log(y)
     return {
       x,
       y,
@@ -80,11 +82,12 @@ export default class Draggable extends Component {
     });
   };
   changeDirection = (direction) => {
-    const {changeDirection, x, boxW} = this.props;
-    const {width} = this.state;
+    const { changeDirection, x, boxW } = this.props;
+    const { width } = this.state;
     let obj = {
       x,
     };
+    // debugger
     if (direction === 'left') {
       let w = x - width;
       obj.x = w < 0 ? width - 11 : x;
@@ -103,23 +106,23 @@ export default class Draggable extends Component {
     }
   }
   render() {
-    const {title, direction, x, y, boxW,childAvatar} = this.props;
+    const { title, direction, x, y, boxW, childAvatar } = this.props;
     return (
-      <View style={{position: 'absolute',opacity: this.props.hide === false ? 0 : 1,top: y,zIndex:999, left: this.leftPosition(x)}}>
+      <View style={{ position: 'absolute', opacity: this.props.hide === false ? 0 : 1, top: y, zIndex: 999, left: this.leftPosition(x) }}>
         {this.props.drage === false ? <Tag
-            setTagSize={this.setTagSize}
-            direction={direction}
-            title={title}
-            small={this.props.small}
-            childAvatar={childAvatar}
-          /> : <Animated.View {...this.panResponder.panHandlers}>
-            {this.props.delete !== true && <Tag
+          setTagSize={this.setTagSize}
+          direction={direction}
+          title={title}
+          small={this.props.small}
+          childAvatar={childAvatar}
+        /> : <Animated.View {...this.panResponder.panHandlers}>
+            <Tag
               setTagSize={this.setTagSize}
               direction={direction}
               title={title}
               childAvatar={childAvatar}
               changeDirection={this.changeDirection}
-            />}
+            />
           </Animated.View>}
       </View>
     );

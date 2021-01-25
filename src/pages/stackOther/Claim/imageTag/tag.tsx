@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, Image, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import SamllTag from './smallTag'
+import css from 'src/libs/mixins/common'
 class Tag extends React.PureComponent {
   changeDirection =(Direction)=> {
     if (this.props.changeDirection) {
@@ -16,7 +17,7 @@ class Tag extends React.PureComponent {
       <View
         onLayout={setTagSize}
         style={{alignItems:'center',flexDirection:'row'}}>
-        {direction === 'right' && <TouchableOpacity onPress={this.changeDirection.bind(this,'left')} activeOpacity={0.9}>
+        {direction === 'right' && <TouchableOpacity hitSlop={{left: 4, right: 4, top: 4, bottom: 4}} onPress={this.changeDirection.bind(this,'left')} activeOpacity={0.9}>
           <View style={{flexDirection: 'row',alignItems: 'center',paddingVertical: 12}}>
             <Image style={styles.drageIconRight} source={require('./icon/icon-c.png')} />
             <View style={styles.drageIconW} />
@@ -26,7 +27,7 @@ class Tag extends React.PureComponent {
           {!!childAvatar && <Image style={{width:24,height:24,marginLeft:3,borderRadius:2}} source={{uri:childAvatar}} />}
           <Text style={styles.drageBoxText}>{title}</Text>
         </View>
-        {direction === 'left' && <TouchableOpacity onPress={this.changeDirection.bind(this,'right')} activeOpacity={0.9}>
+        {direction === 'left' && <TouchableOpacity hitSlop={{left: 4, right: 4, top: 4, bottom: 4}} onPress={this.changeDirection.bind(this,'right')} activeOpacity={0.9}>
           <View style={{flexDirection: 'row',alignItems: 'center',paddingVertical: 12}}>
           <View style={styles.drageIconW} />
           <Image style={styles.drageIconLeft} source={require('./icon/icon-c.png')} />
