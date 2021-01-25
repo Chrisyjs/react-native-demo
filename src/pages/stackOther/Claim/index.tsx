@@ -15,6 +15,8 @@ interface States {
 }
 
 export default class Other extends React.Component {
+  private boxH: number = 0;
+  private init: boolean = true;
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -31,7 +33,6 @@ export default class Other extends React.Component {
     }
   }
   componentDidMount() {
-    this.setImgWH()
   }
   componentWillUnmount() {
   }
@@ -39,10 +40,11 @@ export default class Other extends React.Component {
     return Image.resolveAssetSource(imagePath)
   }
   setImgWH() {
-    let img = this.getImageSize(require('./bg1.jpg'))
+    let img = this.getImageSize(require('./kobe.jpeg'))
     this.setImageSize(img.width, img.height);
   }
   setImageSize = (width, height) => {
+    const { boxH } = this
     let ImageW = width;
     let imageH = height;
     let b = width / height;
@@ -50,9 +52,9 @@ export default class Other extends React.Component {
       ImageW = window.width
       imageH = window.width / b;
     }
-    if (imageH > this.state.boxH) {
-      imageH = this.state.boxH;
-      ImageW = this.state.boxH * b;
+    if (imageH > boxH) {
+      imageH = boxH;
+      ImageW = boxH * b;
     }
     // console.log(imageH, ImageW)
     this.setState({
@@ -127,12 +129,18 @@ export default class Other extends React.Component {
     }
     this.setState({})
   }
+  onLayout = (e) => {
+    this.boxH = e.nativeEvent.layout.height
+    // 计算图片宽高，初始化的时候执行一次
+    this.init && this.setImgWH()
+    this.init = false;
+  }
   render() {
     const { keyboardType, x, y, deleteView, imgW, imgH, claimTagList } = this.state;
     return (
       <View style={{ flex: 1 }}>
-        <SafeAreaView style={{ ...css.flexRow, flex: 1 }}>
-          <View style={{ ...css.bgColor() }}>
+        <SafeAreaView style={{ ...css.flexRow, flex: 1, ...css.bgColor() }}>
+          <View style={{ flex: 1, ...css.flexRow}} onLayout={this.onLayout}>
             {
               claimTagList && claimTagList.length ?
                 claimTagList.map(d =>
@@ -162,9 +170,14 @@ export default class Other extends React.Component {
                   y={50}
                 />
             }
-            <TouchableWithoutFeedback onPress={this.onPressImage}>
-              <Image resizeMode="contain" style={{ width: imgW, height: imgH }} source={require('./bg1.jpg')}></Image>
-            </TouchableWithoutFeedback>
+            <View style={{...css.flexRow()}}>
+              <TouchableWithoutFeedback onPress={this.onPressImage}>
+                {/* <Text>123</Text> */}
+                <Image resizeMode="contain" style={{ width: imgW, height: imgH }} source={require('./kobe.jpeg')}></Image>
+                {/* <Image resizeMode="contain" style={{ width: imgW, height: imgH }} source={require('./kobe.jpeg')}></Image> */}
+                {/* <Image resizeMode="contain" source={require('./kobe.jpeg')}></Image> */}
+              </TouchableWithoutFeedback>
+            </View>
             {deleteView && <View style={{ position: 'absolute', bottom: 30, width: 42, height: 42, left: imgW / 2 - 21, zIndex: 99 }}>
               <Image source={require('./icon/icon-delete.png')} style={{ width: 42, height: 42 }} />
             </View>}
