@@ -31,7 +31,7 @@ export default class Draggable extends Component {
           x: this._left + gs.dx,
           y: this._top + gs.dy,
         };
-        pressDragRelease(e, obj)
+        pressDragRelease(e, obj, false)
       },
       onPanResponderRelease: (e, gs) => {
         this.props.onPress(false)

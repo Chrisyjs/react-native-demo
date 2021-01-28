@@ -109,9 +109,13 @@ export default class index extends Component<Props, States> {
   }
   public setKeyboardType = (type) => {
     this.props.setKeyboardType(type)
+    !type && this.setState({
+      value: ''
+    })
   }
   private iconPress = () => {
     const { keyboardType } = this.props;
+    console.log(keyboardType, 'keyboardType')
     const { keyboardHeight } = this.state;
     if (keyboardType === 'keyboard') {
       // isIconPressed 用来防止 mask 闪烁
