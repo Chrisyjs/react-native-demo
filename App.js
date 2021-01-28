@@ -14,7 +14,8 @@ import Calendar from './src/pages/stackOther/Calendar'
 import Emotion from './src/pages/stackOther/Emotion/index'
 import Emotion1 from './src/pages/stackOther/Emotion/emotion1'
 import Emotion2 from './src/pages/stackOther/Emotion/emotion2'
-import Claim from './src/pages/stackOther/Claim/index'
+import ClaimClass from './src/pages/stackOther/ClaimClass/index'
+import ClaimHook from './src/pages/stackOther/ClaimHook/index'
 import LifeCycle from './src/pages/stackOther/LifeCycle/index'
 import GetDerivedStateFromProps from './src/pages/stackOther/LifeCycle/getDerivedStateFromProps'
 import GetSnapshotBeforeUpdate from './src/pages/stackOther/LifeCycle/getSnapshotBeforeUpdate'
@@ -101,7 +102,8 @@ const StackOther = createStackNavigator(
     Emotion,
     Emotion1,
     Emotion2,
-    Claim,
+    ClaimClass,
+    ClaimHook,
     LifeCycle,
     GetDerivedStateFromProps,
     GetSnapshotBeforeUpdate,

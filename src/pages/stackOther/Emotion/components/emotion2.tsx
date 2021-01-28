@@ -70,9 +70,8 @@ export default class index extends Component<Props, States> {
     this.keyboardDidShow = Keyboard.addListener('keyboardDidShow', this.keyboardDidShowCallback);
     this.keyboardDidHide = Keyboard.addListener('keyboardDidHide', this.keyboardDidHideCallback);
   }
-  static getDerivedStateFromProps(nextProps, state) {  
-    // console.log('getDerivedStateFromProps')
-    // console.log(nextProps.keyboardType, 'getDerivedStateFromProps')
+  componentWillReceiveProps(nextProps) {
+    nextProps.onRef && nextProps.onRef(this);
     if (!nextProps.keyboardType) {  // 关闭评论弹框后重置状态
       return {
         textInputType: 'small',
@@ -81,6 +80,17 @@ export default class index extends Component<Props, States> {
     }
     return null;
   }
+  // static getDerivedStateFromProps(nextProps, state) { 
+  //   // console.log('getDerivedStateFromProps')
+  //   // console.log(nextProps.keyboardType, 'getDerivedStateFromProps')
+  //   if (!nextProps.keyboardType) {  // 关闭评论弹框后重置状态
+  //     return {
+  //       textInputType: 'small',
+  //       value: ''
+  //     }
+  //   }
+  //   return null;
+  // }
   private keyboardDidShowCallback = (e) => {
     // console.log(e.endCoordinates.height)
     this.setKeyboardType('keyboard')
@@ -199,8 +209,8 @@ export default class index extends Component<Props, States> {
     })
   }
   private onPressConfirm = () => {
-    this.setKeyboardType('')
     this.state.value && this.props.onPressConfirm(this.state.value)
+    this.setKeyboardType('')
   }
   public render() {
     const { commentToComponent, placeholder, keyboardType } = this.props;
