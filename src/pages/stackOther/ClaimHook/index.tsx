@@ -42,7 +42,7 @@ const ClaimHook = () => {
   useEffect(() => {
     latestClaimTagList.current = claimTagList
   }, [claimTagList])
-  
+
   /* function */
   function getImageSize(imagePath) {
     return Image.resolveAssetSource(imagePath)
@@ -52,14 +52,6 @@ const ClaimHook = () => {
     setImageSize(img.width, img.height);
   }
   function setImageSize(width, height) {
-    /* 
-      比例计算：
-        - 始终保持原始图片的宽高比
-        - 先比较宽度，超过屏幕宽度，则定为屏幕宽度，高度按比例计算
-        - 然后，比较高度，如果超过 boxH，则定为 boxH，宽度再按比例计算
-        - 所以最终展示图，和原图的比例，就是高度比
-        - 最终存储的数据，应该是打在原图的位置，所以要把比例也传递给后端
-     */
     let ImageW = width;
     let imageH = height;
     let b = width / height;
@@ -139,55 +131,58 @@ const ClaimHook = () => {
   function onLayout(e) {
     if (boxH.current) return
     boxH.current = e.nativeEvent.layout.height
+    console.log(boxH.current, 'boxH.current')
     // 计算图片宽高，初始化的时候执行一次
     setImgWH()
   }
   const { keyboardType, x, y, deleteView, imgW, imgH } = state;
   return (
     <View style={{ flex: 1 }}>
-      <SafeAreaView style={{ ...css.flexRow, flex: 1, ...css.bgColor() }}>
-        <View style={{ flex: 1, ...css.flexRow }} onLayout={onLayout}>
-          {
-            claimTagList && claimTagList.length ?
-              claimTagList.map(d =>
-                <Draggable
-                  boxW={imgW}
-                  boxH={imgH}
-                  key={d.key}
-                  onPress={(e) => setState({ ...state, deleteView: e })}
-                  pressDragRelease={function() {pressRelease(d.key, ...arguments)}}
-                  changeDirection={function() {changeDirection(d.key, ...arguments)}}
-                  x={d.tagLocation.x}
-                  title={d.tagTxt}
-                  direction={d.tagLocation.direction}
-                  delete={d.delete}
-                  childAvatar={d.tagLocation.childAvatar}
-                  y={d.tagLocation.y}
-                />) :
-              <Draggable
-                boxW={imgW}
-                boxH={imgH}
-                key={'1'}
-                title={'点击任意位置进行认领'}
-                direction={'right'}
-                small={true}
-                drage={false}
-                x={100}
-                y={50}
-              />
-          }
-          {/* <View style={{ ...css.flexRow() }}> */}
+      <SafeAreaView style={{ flex: 1, }}>
+        <View style={{ flex: 1, ...css.bgColor(), alignItems: 'center' }}>
+          <View style={{ flex: 1 }} onLayout={onLayout}>
+            {
+                claimTagList && claimTagList.length ?
+                  claimTagList.map(d =>
+                    <Draggable
+                      boxW={imgW}
+                      boxH={imgH}
+                      key={d.key}
+                      onPress={(e) => setState({ ...state, deleteView: e })}
+                      pressDragRelease={function () { pressRelease(d.key, ...arguments) }}
+                      changeDirection={function () { changeDirection(d.key, ...arguments) }}
+                      x={d.tagLocation.x}
+                      title={d.tagTxt}
+                      direction={d.tagLocation.direction}
+                      delete={d.delete}
+                      childAvatar={d.tagLocation.childAvatar}
+                      y={d.tagLocation.y}
+                    />) :
+                  <Draggable
+                    boxW={imgW}
+                    boxH={imgH}
+                    key={'1'}
+                    title={'点击任意位置进行认领'}
+                    direction={'right'}
+                    small={true}
+                    drage={true}
+                    x={100}
+                    y={50}
+                  />
+              }
+            {/* <View style={{ ...css.flexRow() }}> */}
             <TouchableWithoutFeedback onPress={onPressImage}>
               {/* <Text>123</Text> */}
               <Image resizeMode="contain" style={{ width: imgW, height: imgH }} source={require('./kobe.jpeg')}></Image>
               {/* <Image resizeMode="contain" style={{ width: imgW, height: imgH }} source={require('./kobe.jpeg')}></Image> */}
               {/* <Image resizeMode="contain" source={require('./kobe.jpeg')}></Image> */}
             </TouchableWithoutFeedback>
+            {/* </View> */}
+            {deleteView && <View style={{ position: 'absolute', bottom: 30, width: 42, height: 42, left: imgW / 2 - 21, zIndex: 99 }}>
+              <Image source={require('./icon/icon-delete.png')} style={{ width: 42, height: 42 }} />
+            </View>}
           </View>
-          {deleteView && <View style={{ position: 'absolute', bottom: 30, width: 42, height: 42, left: imgW / 2 - 21, zIndex: 99 }}>
-            <Image source={require('./icon/icon-delete.png')} style={{ width: 42, height: 42 }} />
-          </View>}
-        {/* </View> */}
+        </View>
       </SafeAreaView>
       {
         <AddComment

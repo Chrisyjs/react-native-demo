@@ -1,6 +1,5 @@
 import React from 'react';
 import {View, Image, Text, TouchableOpacity, StyleSheet} from 'react-native';
-import SamllTag from './smallTag'
 import css from 'src/libs/mixins/common'
 class Tag extends React.PureComponent {
   changeDirection =(Direction)=> {
@@ -10,9 +9,6 @@ class Tag extends React.PureComponent {
   }
   render() {
     const {direction, setTagSize, changeDirection, title,childAvatar,small} = this.props;
-    if (small === true) {
-      return <SamllTag {...this.props} />
-    }
     return (
       <View
         onLayout={setTagSize}

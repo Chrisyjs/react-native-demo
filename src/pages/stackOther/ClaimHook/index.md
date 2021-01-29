@@ -1,8 +1,12 @@
 #### 注意点
 
-- 拖拽
-  - 手势响应系统：https://reactnative.cn/docs/gesture-responder-system
-  - https://reactnative.cn/docs/panresponder
+- rn
+  - 拖拽
+    - 手势响应系统：https://reactnative.cn/docs/gesture-responder-system
+    - https://reactnative.cn/docs/panresponder
+
+  - flex 布局
+    - 默认 flexDirection 是 column，所以这时候 flex: 1 表示纵向铺满
 
 - 图片比例计算
   - 始终保持原始图片的宽高比
