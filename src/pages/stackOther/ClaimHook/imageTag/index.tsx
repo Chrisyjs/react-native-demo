@@ -1,89 +1,100 @@
-import React, { Component } from 'react';
+import React, { useRef, useState } from 'react';
 import { View, Text, PanResponder, Animated } from 'react-native';
 import Tag from './tag';
-import { debounce, throttle } from 'src/libs/util'
-export default class Draggable extends Component {
-  static defaultProps = {
-    offsetX: 100,
-    renderSize: 36,
-    offsetY: 100,
-    reverse: true,
-  };
-  constructor(props, defaultProps) {
-    super(props, defaultProps);
-    const { pressDragRelease } = props;
-    this.panResponder = PanResponder.create({
-      onMoveShouldSetPanResponder: (_, gestureState) => {
-        const { dx, dy } = gestureState;
-        return (dx > 2 || dx < -2 || dy > 2 || dy < -2)
-      },
-      onMoveShouldSetPanResponderCapture: (_, gestureState) => {
-        const { dx, dy } = gestureState;
-        return (dx > 2 || dx < -2 || dy > 2 || dy < -2)
-      },
-      onPanResponderGrant: (e, gestureState) => {
-        this._top = this.props.y;
-        this._left = this.props.x;
-        this.props.onPress(true)
-      },
-      onPanResponderMove: throttle((e, gs) => {
-        let obj = {
-          x: this._left + gs.dx,
-          y: this._top + gs.dy,
-        };
-        pressDragRelease(e, obj)
-      }, 50, true),
-      onPanResponderRelease: (e, gs) => {
-        this.props.onPress(false)
-        pressDragRelease(e, this.checkOverflow(gs), true);
-      },
-    });
-  }
-  state = {
+
+const Dragable = (props) => {
+  const { title, direction, x, y, boxW, childAvatar, drage, hide } = props;
+
+  /* useState */
+  const [pos, setPos] = useState({
+    _left: x,
+    _top: y,
+  })
+
+  /* useRef */
+  const tagSizeRef = useRef({
     width: 0,
-    height: 0,
-  };
-  checkOverflow = (gs) => {
-    let x = this._left + gs.dx;
-    let y = this._top + gs.dy;
+    height: 0
+  })
+
+  const panResponder = PanResponder.create({
+    onMoveShouldSetPanResponder: (_, gestureState) => {
+      return true
+    },
+    onMoveShouldSetPanResponderCapture: (_, gestureState) => {
+      return true
+    },
+    onPanResponderGrant: (e, gestureState) => {
+      props.onPress(true)
+    },
+    onPanResponderMove: (e, gs) => {
+      let obj = {
+        x: props.x + gs.dx,
+        y: props.y + gs.dy,
+      };
+      props.pressDragRelease(e, obj)
+      // let obj = {
+      //   _left: props.x + gs.dx,
+      //   _top: props.y + gs.dy
+      // }
+      // setPos(obj)
+    },
+    onPanResponderRelease: (e, gs) => {
+      props.onPress(false)
+      props.pressDragRelease(e, checkOverflow(gs), true);
+    },
+  });
+
+  const checkOverflow = (gs) => {
+    let x = props.x + gs.dx;
+    let y = props.y + gs.dy;
     if (x < 0) {
       x = 0;
     }
-    if (this.props.direction === 'left') {
-      if (x < this.state.width - 12) {
-        x = this.state.width - 12;
+    if (props.direction === 'left') {
+      if (x < tagSizeRef.current.width - 12) {
+        x = tagSizeRef.current.width - 12;
       }
     }
-    if (this.props.direction === 'right') {
-      if (x > this.props.boxW - this.state.width) {
-        x = this.props.boxW - this.state.width;
+    if (props.direction === 'right') {
+      if (x > props.boxW - tagSizeRef.current.width) {
+        x = props.boxW - tagSizeRef.current.width;
       }
     } else {
-      if (x > this.props.boxW - 12) {
-        x = this.props.boxW - 12;
+      if (x > props.boxW - 12) {
+        x = props.boxW - 12;
       }
     }
     if (y < 0) {
       y = 0;
     }
-    if (y > this.props.boxH - this.state.height) {
-      y = this.props.boxH - this.state.height;
+    if (y > props.boxH - tagSizeRef.current.height) {
+      y = props.boxH - tagSizeRef.current.height;
     }
-    console.log(y)
     return {
       x,
       y,
     }
   }
-  setTagSize = e => {
-    this.setState({
+
+  const setTagSize = e => {
+    tagSizeRef.current = {
       width: e.nativeEvent.layout.width,
       height: e.nativeEvent.layout.height,
-    });
-  };
-  changeDirection = (direction) => {
-    const { changeDirection, x, boxW } = this.props;
-    const { width } = this.state;
+    }
+  }
+
+  const leftPosition = x => {
+    if (props.direction === 'left') {
+      return x - tagSizeRef.current.width + 12
+    } else {
+      return x;
+    }
+  }
+
+  const changeDirection = (direction) => {
+    const { changeDirection, x, boxW } = props;
+    const { width } = tagSizeRef.current;
     let obj = {
       x,
     };
@@ -96,36 +107,27 @@ export default class Draggable extends Component {
       let w = x + width;
       obj.x = w >= boxW ? boxW - width : x;
     }
-    changeDirection(direction, obj);
+    props.changeDirection(direction, obj);
   };
-  leftPosition = x => {
-    if (this.props.direction === 'left') {
-      return x - this.state.width + 12
-    } else {
-      return x;
-    }
-  }
-  render() {
-    const { title, direction, x, y, boxW, childAvatar } = this.props;
-    return (
-      <View style={{ position: 'absolute', opacity: this.props.hide === false ? 0 : 1, top: y, zIndex: 999, left: this.leftPosition(x) }}>
-        {this.props.drage === false ? <Tag
-          setTagSize={this.setTagSize}
-          direction={direction}
-          title={title}
-          small={this.props.small}
-          childAvatar={childAvatar}
-        /> : <Animated.View {...this.panResponder.panHandlers}>
-            <Tag
-              setTagSize={this.setTagSize}
-              direction={direction}
-              title={title}
-              childAvatar={childAvatar}
-              changeDirection={this.changeDirection}
-            />
-          </Animated.View>}
-      </View>
-    );
-  }
-}
 
+  return (
+    <View style={{ position: 'absolute', opacity: hide === false ? 0 : 1, top: y, zIndex: 999, left: leftPosition(x) }}>
+      {drage === false ? <Tag
+        setTagSize={setTagSize}
+        direction={direction}
+        title={title}
+        small={props.small}
+        childAvatar={childAvatar}
+      /> : <Animated.View {...panResponder.panHandlers}>
+          <Tag
+            setTagSize={setTagSize}
+            direction={direction}
+            title={title}
+            childAvatar={childAvatar}
+            changeDirection={changeDirection}
+          />
+        </Animated.View>}
+    </View>
+  )
+}
+export default Dragable

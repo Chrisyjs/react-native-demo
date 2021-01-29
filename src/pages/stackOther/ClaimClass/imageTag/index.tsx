@@ -27,6 +27,7 @@ export default class Draggable extends Component {
         this.props.onPress(true)
       },
       onPanResponderMove: throttle((e, gs) => {
+        // console.log(gs)
         let obj = {
           x: this._left + gs.dx,
           y: this._top + gs.dy,

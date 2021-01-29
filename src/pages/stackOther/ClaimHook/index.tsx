@@ -131,7 +131,7 @@ const ClaimHook = () => {
   function onLayout(e) {
     if (boxH.current) return
     boxH.current = e.nativeEvent.layout.height
-    console.log(boxH.current, 'boxH.current')
+    // console.log(boxH.current, 'boxH.current')
     // 计算图片宽高，初始化的时候执行一次
     setImgWH()
   }
@@ -165,7 +165,7 @@ const ClaimHook = () => {
                     title={'点击任意位置进行认领'}
                     direction={'right'}
                     small={true}
-                    drage={true}
+                    drage={false}
                     x={100}
                     y={50}
                   />
