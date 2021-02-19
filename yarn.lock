@@ -5337,6 +5337,13 @@ react-native-spring-scrollview@^2.0.23:
   resolved "https://registry.npm.taobao.org/react-native-spring-scrollview/download/react-native-spring-scrollview-2.0.23.tgz#23febfc0d28c63b87dcb260ac3b6d1ad886de3ae"
   integrity sha1-I/6/wNKMY7h9yyYKw7bRrYht464=
 
+react-native-update@^5.10.0:
+  version "5.10.0"
+  resolved "https://registry.yarnpkg.com/react-native-update/-/react-native-update-5.10.0.tgz#1117797092a65a49084b2b61afb20c19bf8bd5b7"
+  integrity sha512-Y1uOXaE+CB/VoqcNH38Fgeit8No1s6gFN1F1c8Dd23qqTHq4Mq3FeqojZsPVY42S6vv8d/yqWWQcOfwbkLHoPQ==
+  dependencies:
+    uuid "3"
+
 react-native@0.61.4:
   version "0.61.4"
   resolved "https://registry.npm.taobao.org/react-native/download/react-native-0.61.4.tgz#9ec6e8a2aa8eac57143dcfa39115c7d9a139bc2c"
@@ -6506,7 +6513,7 @@ utils-merge@1.0.1:
   resolved "https://registry.npm.taobao.org/utils-merge/download/utils-merge-1.0.1.tgz#9f95710f50a267947b2ccc124741c1028427e713"
   integrity sha1-n5VxD1CiZ5R7LMwSR0HBAoQn5xM=
 
-uuid@^3.3.2:
+uuid@3, uuid@^3.3.2:
   version "3.4.0"
   resolved "https://registry.npm.taobao.org/uuid/download/uuid-3.4.0.tgz?cache=0&sync_timestamp=1582550747792&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fuuid%2Fdownload%2Fuuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
   integrity sha1-sj5DWK+oogL+ehAK8fX4g/AgB+4=

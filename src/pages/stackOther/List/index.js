@@ -17,7 +17,7 @@ import {
   Animated,
   ActivityIndicator
 } from 'react-native';
-import { Swipeable, RectButton } from 'react-native-gesture-handler';
+// import { Swipeable, RectButton } from 'react-native-gesture-handler';
 // FlatList.defaultProps = Object.assign(FlatList.defaultProps, {onMoveShouldSetResponder: () => true, onMoveShouldSetResponderCapture: () => true});
 
 
@@ -28,16 +28,24 @@ export default class List extends React.Component {
     footerRefreshing: false,
     listData: [
       {
-        name: '张老师'
+        name: '张老师',
+        imgUrl: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=323600945,481798035&fm=26&gp=0.jpg'
       },
       {
-        name: '张老师1'
+        name: '张老师1',
+        imgUrl: 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3642003233,629840707&fm=26&gp=0.jpg'
       },
       {
-        name: '张老师2'
+        name: '张老师2',
+        imgUrl: 'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3118158831,1502048080&fm=26&gp=0.jpg'
       },
       {
-        name: '张老师3'
+        name: '张老师3',
+        imgUrl: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3780374537,1048793095&fm=26&gp=0.jpg'
+      },
+      {
+        name: '张老师4',
+        imgUrl: 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3069215817,1755831098&fm=26&gp=0.jpg'
       }
     ]
   }
@@ -170,7 +178,7 @@ export default class List extends React.Component {
       <View style={styles.item}>
         <View style={{...styles.flexRow, justifyContent: 'space-between'}}>
           <View style={styles.flexRow}>
-            <Image source={{}} style={styles.photoIcon}></Image>
+            <Image source={{uri: item.imgUrl}} style={styles.photoIcon}></Image>
             <View>
               <View style={styles.flexRow}>
                 <Text style={[styles.fontSize14, styles.fontBlack]}>{item.name}</Text>
@@ -197,41 +205,35 @@ export default class List extends React.Component {
       </View>
     )
   }
-  renderLeftActions = (progress, dragX) => {
-    const trans = dragX.interpolate({
-      inputRange: [0, 50, 100, 101],
-      outputRange: [-20, 0, 0, 1],
-    });
-    return (
-      <RectButton style={styles.leftAction} onPress={this.close}>
-        <Animated.Text
-          style={[
-            styles.actionText,
-            {
-              transform: [{ translateX: trans }],
-            },
-          ]}>
-          Archive
-        </Animated.Text>
-      </RectButton>
-    );
-  };
+  // renderLeftActions = (progress, dragX) => {
+  //   const trans = dragX.interpolate({
+  //     inputRange: [0, 50, 100, 101],
+  //     outputRange: [-20, 0, 0, 1],
+  //   });
+  //   return (
+  //     <RectButton style={styles.leftAction} onPress={this.close}>
+  //       <Animated.Text
+  //         style={[
+  //           styles.actionText,
+  //           {
+  //             transform: [{ translateX: trans }],
+  //           },
+  //         ]}>
+  //         Archive
+  //       </Animated.Text>
+  //     </RectButton>
+  //   );
+  // };
   render() {
     return (
       // <SafeAreaView {...this._panResponder.panHandlers} style={{flex: 1}}>
       <SafeAreaView style={{flex: 1}}>
-        <Swipeable 
-          renderLeftActions={this.renderLeftActions}
-          // leftThreshold={0}
-          // rightThreshold={0}
+        <TouchableOpacity
+          style={{borderColor: 'blue', borderWidth: 1, backgroundColor: 'red', }}
+          onPress={() => this._onRefresh()}
         >
-          <TouchableOpacity
-            style={{borderColor: 'blue', borderWidth: 1, backgroundColor: 'red', }}
-            onPress={() => this._onRefresh()}
-          >
-            <Text style={{textAlign: 'center', padding: 10,}}>刷新</Text>
-          </TouchableOpacity>
-        </Swipeable>
+          <Text style={{textAlign: 'center', padding: 10,}}>刷新</Text>
+        </TouchableOpacity>
         <Button
           title="scrollToEnd"
           onPress={() => this.refs.flatList.scrollToEnd()}

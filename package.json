@@ -6,6 +6,8 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
+    "build:android": "react-native bundle --entry-file index.js --bundle-output ./android/app/src/main/assets/index.android.bundle --platform android --assets-dest ./android/app/src/main/res/ --dev false",
+    "build:android:base": "react-native bundle --entry-file base.js --bundle-output ./android/app/src/main/base/base.android.bundle --platform android --assets-dest ./android/app/src/main/base/ --dev false",
     "test": "jest",
     "lint": "eslint ."
   },
@@ -25,6 +27,7 @@
     "react-native-root-toast": "^3.2.0",
     "react-native-screens": "^1.0.0-alpha.23",
     "react-native-spring-scrollview": "^2.0.23",
+    "react-native-update": "^5.10.0",
     "react-navigation": "^4.0.10",
     "react-navigation-stack": "^1.10.3"
   },

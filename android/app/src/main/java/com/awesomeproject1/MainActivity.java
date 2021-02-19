@@ -1,15 +1,29 @@
 package com.awesomeproject1;
+ 
+import android.content.Intent;
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
-import com.facebook.react.ReactActivity;
+public class MainActivity extends Activity {
 
-public class MainActivity extends ReactActivity {
 
-  /**
-   * Returns the name of the main component registered from JavaScript. This is used to schedule
-   * rendering of the component.
-   */
-  @Override
-  protected String getMainComponentName() {
-    return "AwesomeProject1";
-  }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+ 
+        // 找到按钮控件
+        Button button = findViewById(R.id.btn_go);
+ 
+        // 匿名内部类方式设置点击事件
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, RNActivity.class));
+            }
+        });
+    }
 }

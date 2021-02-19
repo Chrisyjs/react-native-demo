@@ -21,6 +21,7 @@ import GetDerivedStateFromProps from './src/pages/stackOther/LifeCycle/getDerive
 import GetSnapshotBeforeUpdate from './src/pages/stackOther/LifeCycle/getSnapshotBeforeUpdate'
 import SetState from './src/pages/stackOther/LifeCycle/setState'
 import StackViewStyleInterpolator from 'react-navigation-stack/src/views/StackView/StackViewStyleInterpolator';
+import UpdateScreen from './update'
 import { Animated } from 'react-native';
 
 const TransitionConfiguration = () => ({
@@ -127,6 +128,7 @@ const StackOther = createStackNavigator(
   StackOther: StackOther
 }) */
 const AppNavigator = createStackNavigator({   // 一样跨栈的
+  UpdateScreen: UpdateScreen,
   HomeScreen: HomeScreen,
   StackA: StackA,
   StackB: StackB,

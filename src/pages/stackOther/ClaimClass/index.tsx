@@ -137,6 +137,7 @@ export default class Other extends React.Component {
   }
   render() {
     const { keyboardType, x, y, deleteView, imgW, imgH, claimTagList } = this.state;
+    console.log('render')
     return (
       <View style={{ flex: 1 }}>
         <SafeAreaView style={{ ...css.flexRow, flex: 1, ...css.bgColor() }}>
@@ -170,14 +171,14 @@ export default class Other extends React.Component {
                   y={50}
                 />
             }
-            <View style={{...css.flexRow()}}>
+            {/* <View style={{...css.flexRow()}}> */}
               <TouchableWithoutFeedback onPress={this.onPressImage}>
                 {/* <Text>123</Text> */}
                 <Image resizeMode="contain" style={{ width: imgW, height: imgH }} source={require('./kobe.jpeg')}></Image>
                 {/* <Image resizeMode="contain" style={{ width: imgW, height: imgH }} source={require('./kobe.jpeg')}></Image> */}
                 {/* <Image resizeMode="contain" source={require('./kobe.jpeg')}></Image> */}
               </TouchableWithoutFeedback>
-            </View>
+            {/* </View> */}
             {deleteView && <View style={{ position: 'absolute', bottom: 30, width: 42, height: 42, left: imgW / 2 - 21, zIndex: 99 }}>
               <Image source={require('./icon/icon-delete.png')} style={{ width: 42, height: 42 }} />
             </View>}

@@ -16,6 +16,7 @@ export default class A2 extends React.Component {
   }
   handleBackPress = () => {
     this.props.navigation.goBack();
+    console.log('handleBackPress A2')
     return true;
   }
   didFocus = () => {

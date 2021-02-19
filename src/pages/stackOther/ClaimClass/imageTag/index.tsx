@@ -27,26 +27,32 @@ export default class Draggable extends Component {
         this.props.onPress(true)
       },
       onPanResponderMove: throttle((e, gs) => {
-        // console.log(gs)
-        let obj = {
-          x: this._left + gs.dx,
-          y: this._top + gs.dy,
-        };
-        pressDragRelease(e, obj)
+        this.setState({
+          x: this._left + gs.dx,  // 初始位置+距离初始位置移动的距离
+          y: this._top + gs.dy
+        })
       }, 50, true),
       onPanResponderRelease: (e, gs) => {
         this.props.onPress(false)
-        pressDragRelease(e, this.checkOverflow(gs), true);
+        const { x, y } = this.checkOverflow()
+        this.setState({
+          x,
+          y
+        }, () => {
+          pressDragRelease(e, {x: this.state.x, y: this.state.y}, true);
+        })
       },
     });
   }
   state = {
     width: 0,
     height: 0,
+    x: this.props.x,
+    y: this.props.y
   };
-  checkOverflow = (gs) => {
-    let x = this._left + gs.dx;
-    let y = this._top + gs.dy;
+  checkOverflow = () => {
+    let x = this.state.x;
+    let y = this.state.y;
     if (x < 0) {
       x = 0;
     }
@@ -70,7 +76,6 @@ export default class Draggable extends Component {
     if (y > this.props.boxH - this.state.height) {
       y = this.props.boxH - this.state.height;
     }
-    console.log(y)
     return {
       x,
       y,
@@ -97,7 +102,12 @@ export default class Draggable extends Component {
       let w = x + width;
       obj.x = w >= boxW ? boxW - width : x;
     }
-    changeDirection(direction, obj);
+    this.setState({
+      x: obj.x,
+      y: this.props.y
+    }, () => {
+      changeDirection(direction, obj);
+    })
   };
   leftPosition = x => {
     if (this.props.direction === 'left') {
@@ -107,7 +117,8 @@ export default class Draggable extends Component {
     }
   }
   render() {
-    const { title, direction, x, y, boxW, childAvatar } = this.props;
+    const { title, direction, boxW, childAvatar } = this.props;
+    const { x, y } = this.state;
     return (
       <View style={{ position: 'absolute', opacity: this.props.hide === false ? 0 : 1, top: y, zIndex: 999, left: this.leftPosition(x) }}>
         {this.props.drage === false ? <Tag
