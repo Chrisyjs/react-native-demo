@@ -1,3 +1,5 @@
 <resources>
+	<string moduleConfig="true" name="reactNativeCodePush_androidDeploymentKey">EaFpkEuzrPWACwkBgKkPFdfqzvgI4ksvOXqog</string>
+	<string moduleConfig="true" name="reactNativeCodePush_androidServerURL">http://114.55.94.132:3000</string>
     <string name="app_name">AwesomeProject1</string>
 </resources>

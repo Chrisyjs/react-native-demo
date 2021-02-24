@@ -4,14 +4,14 @@ import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
-import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
+import com.microsoft.codepush.react.CodePush;
+// import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import cn.reactnative.modules.update.UpdateContext;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -20,12 +20,16 @@ public class MainApplication extends Application implements ReactApplication {
         // 注意这一段在 ReactNativeHost 内部！
         @Override
         protected String getJSBundleFile() {
-            return UpdateContext.getBundleUrl(MainApplication.this);
+            return CodePush.getJSBundleFile();
         }
         @Override
         public boolean getUseDeveloperSupport() {
           return BuildConfig.DEBUG;
         }
+        // @Override    
+        // public boolean canOverrideExistingModule() {        
+        //   return true;    
+        // } 
 
         @Override
         protected List<ReactPackage> getPackages() {
@@ -34,6 +38,14 @@ public class MainApplication extends Application implements ReactApplication {
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new AsyncStoragePackage());
           // packages.add(new RNGestureHandlerPackage());
+          // packages.add(new CodePush("EaFpkEuzrPWACwkBgKkPFdfqzvgI4ksvOXqog", MainApplication.this, BuildConfig.DEBUG, "http://114.55.94.132:3000"));
+          packages.add(
+            new CodePush(
+              getResources().getString(R.string.reactNativeCodePush_androidDeploymentKey), 
+              getApplicationContext(), BuildConfig.DEBUG, 
+              getResources().getString(R.string.reactNativeCodePush_androidServerURL)
+            )
+          );
           return packages;
         }
 
