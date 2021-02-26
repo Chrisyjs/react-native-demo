@@ -1,6 +1,7 @@
 
 function createModuleIdFactory() {
-  if (process.env.NODE_ENV != 'production') { // debug模式
+  
+  if (process.env.NODE_ENV1 != 'prod') { // debug模式
     const fileToIdMap = new Map();
     let nextId = 0;
     return path => {
@@ -17,19 +18,22 @@ function createModuleIdFactory() {
     // path 为模块路径名称
     return path => {
       let moduleName = '';
-      if (path.indexOf('node_modules\\react-native\\Libraries\\') > 0) { 
-        moduleName = path.substr(path.lastIndexOf('\\') + 1); 
-      } else if (path.indexOf(projectRootPath) == 0) { 
-        moduleName = path.substr(projectRootPath.length + 1); 
-      } 
-      moduleName = moduleName.replace('.js', ''); 
-      moduleName = moduleName.replace('.png', ''); 
-      moduleName = moduleName.replace('.jpg', ''); 
-      moduleName = moduleName.replace(/\\/g, '_'); // 适配Windows平台路径问题 
-      moduleName = moduleName.replace(/\//g, '_'); // 适配macos平台路径问题 
-      return moduleName; 
-    }; 
-  } 
+      if(path.indexOf('node_modules\\react-native\\Libraries\\') > 0) {
+          moduleName = path.substr(path.lastIndexOf('\\') + 1);
+      } else if(path.indexOf(projectRootPath)==0){
+          moduleName = path.substr(projectRootPath.length + 1);
+      }
+  
+      moduleName = moduleName.replace('.js', '');
+      moduleName = moduleName.replace('.png', '');
+      moduleName = moduleName.replace('.jpg', '');
+      moduleName = moduleName.replace(/\\/g, '_'); // 适配Windows平台路径问题
+      moduleName = moduleName.replace(/\//g, '_'); // 适配macos平台路径问题
+  
+      return moduleName;
+    };
+  }
+  
 }
 
 module.exports = {
